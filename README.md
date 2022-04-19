@@ -17,7 +17,6 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
 
 ### Example 1 - Key handling
 ```rust
-    znn_sdk_rust::hi_from_zenon();
     let mnemonic = "route become dream access impulse price inform obtain engage ski believe awful absent pig thing vibrant possible exotic flee pepper marble rural fire fancy".to_string();
 
     let keystore = KeyStore::from_mnemonic(mnemonic);
@@ -34,11 +33,6 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
     println!("public key: {}", hex::encode(public_key));
 ```
 
-
 ## Contributing
 
 Please contact us for more details.
-
-## License
-
-The MIT License (MIT). Please check LICENSE for more information.
