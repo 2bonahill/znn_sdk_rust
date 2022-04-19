@@ -17,6 +17,10 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
 
 ### Example 1 - Key handling
 ```rust
+    use znn_sdk_rust::wallet::{keypair::KeyPair, keystore::KeyStore};
+
+    ...
+    
     let mnemonic = "route become dream access impulse price inform obtain engage ski believe awful absent pig thing vibrant possible exotic flee pepper marble rural fire fancy".to_string();
 
     let keystore = KeyStore::from_mnemonic(mnemonic);
