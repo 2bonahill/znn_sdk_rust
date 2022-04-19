@@ -26,10 +26,10 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
     println!("seed: {}", hex::encode(&keystore.seed));
 
     let keypair: KeyPair = keystore.get_keypair();
-    let private_key = keypair.get_private_key();
-    let public_key = keypair.get_public_key();
+    let secret_key: &Vec<u8> = keypair.get_secret_key();
+    let public_key: &Vec<u8> = keypair.get_public_key();
 
-    println!("secret key: {}", hex::encode(private_key));
+    println!("secret key: {}", hex::encode(secret_key));
     println!("public key: {}", hex::encode(public_key));
 ```
 

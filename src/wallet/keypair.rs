@@ -1,22 +1,22 @@
 use crate::model::primitives::address::Address;
 
 pub struct KeyPair {
-    pub private_key: Vec<u8>,
+    pub secret_key: Vec<u8>,
     pub public_key: Vec<u8>,
     address: Option<Address>,
 }
 
 impl KeyPair {
-    pub fn new(private_key: Vec<u8>, public_key: Vec<u8>, address: Option<Address>) -> Self {
+    pub fn new(secret_key: Vec<u8>, public_key: Vec<u8>, address: Option<Address>) -> Self {
         Self {
-            private_key,
+            secret_key,
             public_key,
             address,
         }
     }
 
-    pub fn get_private_key(&self) -> &Vec<u8> {
-        &self.private_key
+    pub fn get_secret_key(&self) -> &Vec<u8> {
+        &self.secret_key
     }
 
     pub fn get_public_key(&self) -> &Vec<u8> {
