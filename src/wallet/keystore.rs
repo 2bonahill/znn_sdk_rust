@@ -1,5 +1,9 @@
 use bip39::*;
 
+use crate::crypto::crypto;
+
+use super::keypair::KeyPair;
+
 #[derive(Debug, Default)]
 pub struct KeyStore {
     pub entropy: Vec<u8>,
@@ -7,27 +11,26 @@ pub struct KeyStore {
     pub seed: Vec<u8>,
 }
 
-#[allow(non_snake_case)]
 impl KeyStore {
-    pub fn fromMnemonic(mnemonic: String) -> Self {
+    pub fn from_mnemonic(mnemonic: String) -> Self {
         let mut s: KeyStore = KeyStore::default();
-        s.setMnemonic(mnemonic);
+        s.set_mnemonic(mnemonic);
         s
     }
 
-    pub fn fromSeed(seed: Vec<u8>) -> Self {
+    pub fn from_seed(seed: Vec<u8>) -> Self {
         let mut s: KeyStore = KeyStore::default();
-        s.setSeed(seed);
+        s.set_seed(seed);
         s
     }
 
-    pub fn fromEntropy(entropy: Vec<u8>) -> Self {
+    pub fn from_entropy(entropy: Vec<u8>) -> Self {
         let mut s: KeyStore = KeyStore::default();
-        s.setEntropy(entropy);
+        s.set_entropy(entropy);
         s
     }
 
-    fn setMnemonic(&mut self, mnemonic: String) {
+    fn set_mnemonic(&mut self, mnemonic: String) {
         let mn = Mnemonic::from_phrase(&mnemonic, Language::English).expect("Mnemonic not valid.");
         self.mnemonic = mnemonic;
 
@@ -37,16 +40,24 @@ impl KeyStore {
         self.seed = seed.as_bytes().into();
     }
 
-    pub fn setSeed(&mut self, seed: Vec<u8>) {
+    fn set_seed(&mut self, seed: Vec<u8>) {
         self.seed = seed;
     }
 
-    pub fn setEntropy(&mut self, entropy: Vec<u8>) {
+    fn set_entropy(&mut self, entropy: Vec<u8>) {
         let mnemonic = Mnemonic::from_entropy(&entropy, Language::English)
             .expect("Unable to generate mnemonic from entropy.")
             .into_phrase();
-        self.setMnemonic(mnemonic);
+        self.set_mnemonic(mnemonic);
     }
+
+    pub fn get_keypair(&self) -> KeyPair {
+        let (secret_key, public_key) =
+            crypto::derive_key("m/44'/73404'/0'".to_string(), &self.seed);
+        KeyPair::new(secret_key, public_key, None)
+    }
+
+    pub fn test(&self) {}
 }
 
 #[cfg(test)]
@@ -68,7 +79,7 @@ mod tests {
 
     #[test]
     fn test_keystore_from_mnemonic() {
-        let keyStore = KeyStore::fromMnemonic(MNEMONIC.to_string());
+        let keyStore = KeyStore::from_mnemonic(MNEMONIC.to_string());
         assert_eq!(keyStore.mnemonic, MNEMONIC);
         assert_eq!(keyStore.seed, SEED);
         assert_eq!(keyStore.entropy, ENTROPY)
