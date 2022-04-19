@@ -52,9 +52,11 @@ impl KeyStore {
     }
 
     pub fn get_keypair(&self) -> KeyPair {
-        let (secret_key, public_key) =
+        // BIP44 https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+        // m / purpose' / coin_type' / account' / change / address_index
+        let (secret_key, public_key, address) =
             crypto::derive_key("m/44'/73404'/0'".to_string(), &self.seed);
-        KeyPair::new(secret_key, public_key, None)
+        KeyPair::new(secret_key, public_key, address)
     }
 
     pub fn test(&self) {}
