@@ -24,11 +24,10 @@ fn parse_derivation_path(path: &str) -> DerivationPath {
 fn derive_address_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
     let mut hasher = Sha3_256::new();
     hasher.update(public_key);
-    let hash: [u8; 32] = hasher.finalize().into();
-    let mut hash_vector: Vec<u8> = hash.to_vec();
-    hash_vector.insert(0, 0u8);
-    hash_vector.truncate(20);
-    hash_vector
+    let mut hash: Vec<u8> = hasher.finalize().to_vec();
+    hash.insert(0, 0u8);
+    hash.truncate(20);
+    hash
 }
 
 #[cfg(test)]
