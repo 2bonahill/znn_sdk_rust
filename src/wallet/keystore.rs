@@ -63,7 +63,6 @@ impl KeyStore {
 }
 
 #[cfg(test)]
-#[allow(non_snake_case)]
 mod tests {
     use crate::wallet::keystore::KeyStore;
 
@@ -81,9 +80,9 @@ mod tests {
 
     #[test]
     fn test_keystore_from_mnemonic() {
-        let keyStore = KeyStore::from_mnemonic(MNEMONIC.to_string());
-        assert_eq!(keyStore.mnemonic, MNEMONIC);
-        assert_eq!(keyStore.seed, SEED);
-        assert_eq!(keyStore.entropy, ENTROPY)
+        let key_store = KeyStore::from_mnemonic(MNEMONIC.to_string());
+        assert_eq!(key_store.mnemonic, MNEMONIC);
+        assert_eq!(key_store.seed, SEED);
+        assert_eq!(key_store.entropy, ENTROPY)
     }
 }
