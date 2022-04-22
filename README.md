@@ -47,8 +47,16 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
   println!("secret key: {:?}", secret_key);
   println!("public key: {:?}", public_key);
   println!("address: {:?}", address);
+```
 
-  // APIs
+### Example 2 - APIs
+```rust
+  use znn_sdk_rust as znn;
+  use znn::client::websocket::WsClient;
+  use znn::wallet::{keypair::KeyPair, keystore::KeyStore};
+
+  ...
+  
   let client: WsClient = WsClient::initialize("ws://nodes.zenon.place:35998").await;
   println!("is the client connected?: {}", client.is_connected());
 
