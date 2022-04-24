@@ -52,11 +52,11 @@ impl WsClient {
 #[cfg(test)]
 mod tests {
     use crate::client::websocket::WsClient;
-    use futures::executor::block_on;
+    use pretty_assertions::{assert_eq, assert_ne};
 
-    // #[test]
-    // fn test_initialize() {
-    //     block_on(WsClient::initialize("ws://nodes.zenon.place:35998"));
-    //     assert_eq!(1, 1);
-    // }
+    #[tokio::test]
+    async fn test_initialize() {
+        let client = WsClient::initialize("ws://nodes.zenon.place:35998").await;
+        assert_eq!(client.is_connected(), true);
+    }
 }

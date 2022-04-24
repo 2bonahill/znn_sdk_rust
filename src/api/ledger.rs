@@ -1,4 +1,4 @@
-use async_std::stream::Map;
+use serde_json::Map;
 use serde_json::Value;
 
 use crate::client::websocket::WsClient;
