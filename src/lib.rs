@@ -1,6 +1,5 @@
 pub mod abi;
 pub mod api;
-pub mod argon2;
 pub mod client;
 pub mod crypto;
 pub mod embedded;
