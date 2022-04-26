@@ -2,6 +2,10 @@
 
 Reference implementation for the Zenon SDK for Rust. Compatible with the Zenon Alphanet - Network of Momentum Phase 0. It provides a simple integration with any Rust based projects.
 
+## Zenon Accelerator-Z 
+
+The project proposal can be found here: https://github.com/2bonahill/znn_sdk_rust/blob/main/AZ.md
+
 ## Setup
 
 To start using this library, edit the `Cargo.toml` by adding the following lines:
