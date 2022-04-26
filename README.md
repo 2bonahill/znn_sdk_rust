@@ -55,9 +55,11 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
 
 ### Example 2 - APIs
 ```rust
-  use znn_sdk_rust as znn;
   use znn::client::websocket::WsClient;
-  use znn::wallet::{keypair::KeyPair, keystore::KeyStore};
+  use znn::model::embedded::pillar::PillarInfoList;
+  use znn::model::nom::account_info::AccountInfo;
+  use znn::model::primitives::address::Address;
+  use znn_sdk_rust as znn;
 
   ...
   
