@@ -11,7 +11,7 @@ The goal is to closely stick with the SDKs provided by the Zenon Core Dev team. 
 
 This phase will cover all crypto related aspects of the SDK:
 
-### 1.1 The crypto primitives
+### 1.1 The crypto primitives and algorithms
 
 This will mainly be the adoption of the algorithms involved:
 - Argon2 (Key derivation and password hashing)
@@ -29,48 +29,85 @@ Goal of this phase is to leverage the crypto primitives and to implement the Zen
 - keyStore (setting up the keys, e.g. from mnemonic seed phrases or from entropy)
 - KeyFile (storing, encrypting and decrypting the wallets)
 
-
-## Phase 2 - APIs (JSON-RPC)
-
-The goal of this phase is to enable communication with the Zenon network.
-
-### 2.1 The JSON-RPC client
+## Phase 2 - The JSON RPC client
 
 Setting up the client to communicate with the network. First one will be using websockets as the means of transportation.
 
-### 2.2 The embedded APIs
+## Phase 3 - APIs and Models
 
-Next phase will be to implement all the APIs for the smart contracts. This includes setting up the data structures (strong typing in Rust), JSON parsing, etc.
+The goal of this phase is to enable communication with the Zenon network. Goal will be to implement all the APIs for the smart contracts. This includes setting up the data structures (strong typing in Rust), JSON parsing, etc.
 
 The list will cover:
 
-- embedded.pillar
-- embedded.plasma
-- embedded.sentinel
-- embedded.token
-- embedded.swap
-- embedded.stake
+- Embedded
+- Ledger
+- Stats
+- Wallet: to manage wallets through the Node
 
-See https://wiki.zenon.network/#!api.md for the whole list.
+The full list can be found here: https://wiki.zenon.network/#!api.md
 
-### 2.2 The ledger and status APIs
+### 3.1 Embedded Endpoints
 
-- ledger.getFrontierAccountBlock
-- ledger.getUnconfirmedBlocksByAddress
-- ledger.getUnreceivedBlocksByAddress
-- ledger.getAccountBlockByHash
-- ledger.getAccountBlocksByHeight
-- ledger.getAccountBlocksByPage
-- ledger.getFrontierMomentum
-- ledger.getMomentumBeforeTime
-- ledger.getMomentumByHash
-- ledger.getMomentumsByHeight
-- ledger.getMomentumsByPage
-- ledger.getDetailedMomentumsByHeight
-- ledger.getAccountInfoByAddress
+The embedded endpoints provide endpoints to interact with the NoM embedded smart contracts.
 
-See https://wiki.zenon.network/#!api.md for the whole list.
+- embedded.pillar (9 endpoints)
+- embedded.plasma (3 endpoints)
+- embedded.sentinel (5 endpoints)
+- embedded.token (3 endpoints)
+- embedded.swap (3 endpoints)
+- embedded.stake (3 endpoints)
 
-## Phase 3 - Integration tests
+### 3.2 Ledger Endpoints
+
+Ledger provides 13 + 4 (subscribe) endpoints to interact with the NoM dual-ledger.
+
+### 3.3 Stats Endpoints
+
+Stats provides 5 endpoints to examine stats and other information about the Node.
+
+
+
+# Time estimation
+
+## Phase 1 (Crypto)
+=> Crypto primitives and algorithms: 4 days -> 32h
+=> Wallet: 2 days -> 16h
+
+## Phase 2 (JSON-RPC)
+=> 0.5 day -> 4h
+
+## Phase 3 (APIs)
+
+There is a total of 48 endpoints to be implemented. For every endpoint there is a data model to be applied to it. Implementing the first two enppoints ...
+
+- znn::api::embedded::Pillar::get_all(...)
+- znn::api::Ledger::get_account_info_by_address(...)
+
+took a day, but will be much faster because of the repetition involved. 
+
+Estimation used: 1h per endpoint.
+
+=> 48*1h = +- 50h
+
+## Phase 4 - Testing (unit and integration testing)
 
 This phase is not a separated one, because for all the features unit tests will be written in parallel. The goal will be to have a near 100% test coverage for the unit tests. On top of that, integration tests will ensure that end-to-end processes work as specified.
+
+Unit tests will be an integral part, especially for the strongly typed JSON parsing and error handling. 
+
+From experience, testing will be estimated roughly a +25% of the implementation effort.
+
+# Total estimation
+
+- Total implementation: 32 + 16 + 4 + 50 = 100h
+- Testing: 25h
+
+**=> Total of roughly 125 hours**
+
+As proposed by the community, a generous hourly rate of $100 will be applied.
+
+**=> 125h * 100 = $12'500**
+
+At the current price of roughly $7 per ZNN this makes: 
+
+**=> 12'500 / 6.5 = ZNN 2'000**
