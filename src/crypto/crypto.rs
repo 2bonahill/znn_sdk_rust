@@ -1,24 +1,21 @@
+use anyhow::Result;
 use ed25519_dalek_bip32::DerivationPath;
 use ed25519_dalek_bip32::ExtendedSecretKey;
 use sha3::{Digest, Sha3_256};
 
-pub fn derive_key(path: String, seed: &Vec<u8>) -> (Vec<u8>, Vec<u8>, Vec<u8>) {
-    let dp: DerivationPath = parse_derivation_path(&path);
-    let extended_secret_key: ExtendedSecretKey = ExtendedSecretKey::from_seed(seed)
-        .expect("Unable to generate secret key from seed.")
-        .derive(&dp)
-        .expect("Failed path derivation");
+pub fn derive_key(path: String, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
+    let dp: DerivationPath = parse_derivation_path(&path)?;
+    let extended_secret_key: ExtendedSecretKey = ExtendedSecretKey::from_seed(seed)?.derive(&dp)?;
 
     let secret_key: [u8; 32] = extended_secret_key.secret_key.to_bytes();
     let public_key: [u8; 32] = extended_secret_key.public_key().to_bytes();
     let address: Vec<u8> = derive_address_from_public_key(&public_key);
 
-    (secret_key.into(), public_key.into(), address.into())
+    Ok((secret_key.into(), public_key.into(), address.into()))
 }
 
-fn parse_derivation_path(path: &str) -> DerivationPath {
-    path.parse::<DerivationPath>()
-        .expect("Failed parsing derivation path")
+fn parse_derivation_path(path: &str) -> Result<DerivationPath> {
+    Ok(path.parse::<DerivationPath>()?)
 }
 
 fn derive_address_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
@@ -33,6 +30,9 @@ fn derive_address_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
 #[cfg(test)]
 #[allow(non_snake_case)]
 mod tests {
+    use anyhow::Ok;
+    use anyhow::Result;
+
     use crate::crypto::crypto;
 
     const PATH: &str = "m/44'/73404'/0'";
@@ -55,11 +55,12 @@ mod tests {
     ];
 
     #[test]
-    fn test_derive_key() {
+    fn test_derive_key() -> Result<()> {
         let (secret_key, public_key, address) =
-            crypto::derive_key(PATH.to_string(), &SEED.to_vec());
+            crypto::derive_key(PATH.to_string(), &SEED.to_vec())?;
         assert_eq!(secret_key, SECRET_KEY);
         assert_eq!(public_key, PUBLIC_KEY);
         assert_eq!(address, ADDRESS);
+        Ok(())
     }
 }

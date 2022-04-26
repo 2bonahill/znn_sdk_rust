@@ -1,8 +1,7 @@
-use bip39::*;
-
-use crate::crypto::crypto;
-
 use super::keypair::KeyPair;
+use crate::crypto::crypto;
+use anyhow::Result;
+use bip39::*;
 
 #[derive(Debug, Default)]
 pub struct KeyStore {
@@ -12,10 +11,10 @@ pub struct KeyStore {
 }
 
 impl KeyStore {
-    pub fn from_mnemonic(mnemonic: String) -> Self {
+    pub fn from_mnemonic(mnemonic: String) -> Result<Self> {
         let mut s: KeyStore = KeyStore::default();
-        s.set_mnemonic(mnemonic);
-        s
+        s.set_mnemonic(mnemonic)?;
+        Ok(s)
     }
 
     pub fn from_seed(seed: Vec<u8>) -> Self {
@@ -24,39 +23,39 @@ impl KeyStore {
         s
     }
 
-    pub fn from_entropy(entropy: Vec<u8>) -> Self {
+    pub fn from_entropy(entropy: Vec<u8>) -> Result<Self> {
         let mut s: KeyStore = KeyStore::default();
-        s.set_entropy(entropy);
-        s
+        s.set_entropy(entropy)?;
+        Ok(s)
     }
 
-    fn set_mnemonic(&mut self, mnemonic: String) {
-        let mn = Mnemonic::from_phrase(&mnemonic, Language::English).expect("Mnemonic not valid.");
+    fn set_mnemonic(&mut self, mnemonic: String) -> Result<()> {
+        let mn = Mnemonic::from_phrase(&mnemonic, Language::English)?;
         self.mnemonic = mnemonic;
 
         self.entropy = mn.entropy().into();
 
         let seed = Seed::new(&mn, "");
         self.seed = seed.as_bytes().into();
+        Ok(())
     }
 
     fn set_seed(&mut self, seed: Vec<u8>) {
         self.seed = seed;
     }
 
-    fn set_entropy(&mut self, entropy: Vec<u8>) {
-        let mnemonic = Mnemonic::from_entropy(&entropy, Language::English)
-            .expect("Unable to generate mnemonic from entropy.")
-            .into_phrase();
-        self.set_mnemonic(mnemonic);
+    fn set_entropy(&mut self, entropy: Vec<u8>) -> Result<()> {
+        let mnemonic = Mnemonic::from_entropy(&entropy, Language::English)?.into_phrase();
+        self.set_mnemonic(mnemonic)?;
+        Ok(())
     }
 
-    pub fn get_keypair(&self) -> KeyPair {
+    pub fn get_keypair(&self) -> Result<KeyPair> {
         // BIP44 https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
         // m / purpose' / coin_type' / account' / change / address_index
         let (secret_key, public_key, address) =
-            crypto::derive_key("m/44'/73404'/0'".to_string(), &self.seed);
-        KeyPair::new(secret_key, public_key, address)
+            crypto::derive_key("m/44'/73404'/0'".to_string(), &self.seed)?;
+        Ok(KeyPair::new(secret_key, public_key, address))
     }
 
     pub fn test(&self) {}
@@ -65,6 +64,7 @@ impl KeyStore {
 #[cfg(test)]
 mod tests {
     use crate::wallet::keystore::KeyStore;
+    use anyhow::Result;
 
     const MNEMONIC: &str = "route become dream access impulse price inform obtain engage ski believe awful absent pig thing vibrant possible exotic flee pepper marble rural fire fancy";
     const SEED: [u8; 64] = [
@@ -79,10 +79,11 @@ mod tests {
     ];
 
     #[test]
-    fn test_keystore_from_mnemonic() {
-        let key_store = KeyStore::from_mnemonic(MNEMONIC.to_string());
+    fn test_keystore_from_mnemonic() -> Result<()> {
+        let key_store = KeyStore::from_mnemonic(MNEMONIC.to_string())?;
         assert_eq!(key_store.mnemonic, MNEMONIC);
         assert_eq!(key_store.seed, SEED);
-        assert_eq!(key_store.entropy, ENTROPY)
+        assert_eq!(key_store.entropy, ENTROPY);
+        Ok(())
     }
 }

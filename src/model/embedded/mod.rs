@@ -1,1 +1,1 @@
-mod pillar;
+pub mod pillar;

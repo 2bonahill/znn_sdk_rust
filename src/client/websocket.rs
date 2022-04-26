@@ -1,6 +1,6 @@
+use anyhow::Result;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_ws_client::{types::ParamsSer, WsClientBuilder};
-use serde_json::Map;
 use serde_json::Value;
 
 pub struct WsClient {
@@ -8,28 +8,22 @@ pub struct WsClient {
 }
 
 impl WsClient {
-    pub async fn initialize(url: &str) -> Self {
-        Self {
-            client: WsClientBuilder::default().build(url).await.unwrap(),
-        }
+    pub async fn initialize(url: &str) -> Result<Self> {
+        Ok(Self {
+            client: WsClientBuilder::default().build(url).await?,
+        })
     }
 
     pub fn is_connected(&self) -> bool {
         self.client.is_connected()
     }
 
+    #[allow(non_snake_case)]
     pub async fn sendRequest(
         &self,
         method: &str,
         params: Vec<Value>,
-    ) -> serde_json::Map<String, serde_json::Value> {
-        // let parameters = {
-        //     let mut parameters = Vec::new();
-        //     parameters.push(serde_json::to_value(1).unwrap());
-        //     parameters.push(serde_json::to_value(10).unwrap());
-        //     Some(ParamsSer::Array(parameters))
-        // };
-
+    ) -> Result<serde_json::Map<String, serde_json::Value>> {
         let parameters = {
             let mut parameters = Vec::new();
 
@@ -42,21 +36,22 @@ impl WsClient {
         let response = self
             .client
             .request::<serde_json::Map<String, _>>(method, parameters)
-            .await
-            .unwrap();
+            .await?;
 
-        response
+        Ok(response)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use crate::client::websocket::WsClient;
-    use pretty_assertions::{assert_eq, assert_ne};
+    use anyhow::Result;
+    use pretty_assertions::assert_eq;
 
     #[tokio::test]
-    async fn test_initialize() {
-        let client = WsClient::initialize("ws://nodes.zenon.place:35998").await;
+    async fn test_initialize() -> Result<()> {
+        let client = WsClient::initialize("ws://nodes.zenon.place:35998").await?;
         assert_eq!(client.is_connected(), true);
+        Ok(())
     }
 }

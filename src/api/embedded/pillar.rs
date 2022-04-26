@@ -1,21 +1,28 @@
 use crate::client::websocket::WsClient;
+use crate::model::embedded::pillar::PillarInfoList;
+use anyhow::Result;
 use serde_json::Map;
 use serde_json::Value;
 
 pub struct PillarApi {}
 
 impl PillarApi {
-    pub async fn get_all(client: &WsClient, page_index: u8, page_size: u8) -> Map<String, Value> {
-        let response = client
+    pub async fn get_all(
+        client: &WsClient,
+        page_index: u8,
+        page_size: u8,
+    ) -> Result<PillarInfoList> {
+        let response: Map<String, Value> = client
             .sendRequest(
                 "embedded.pillar.getAll",
                 vec![
-                    serde_json::to_value(page_index).unwrap(),
-                    serde_json::to_value(page_size).unwrap(),
+                    serde_json::to_value(page_index)?,
+                    serde_json::to_value(page_size)?,
                 ],
             )
-            .await;
+            .await?;
 
-        response
+        let pil: PillarInfoList = serde_json::from_value(serde_json::Value::Object(response))?;
+        Ok(pil)
     }
 }
