@@ -99,12 +99,12 @@ From experience, testing will be estimated roughly a +25% of the implementation 
 
 # Total estimation
 
-- Total implementation: 32 + 16 + 4 + 50 = 100h
-- Testing: 25h
+- Total implementation effort: 32 + 16 + 4 + 50 = 100h
+- Testing:  25h
 
 **=> Total of roughly 125 hours**
 
-As proposed by the community, a generous hourly rate of $100 will be applied.
+As proposed by the community, a generous hourly rate of $100 can be applied.
 
 **=> 125h * 100 = $12'500**
 
