@@ -61,13 +61,24 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
 
   ...
   
-  let client: WsClient = WsClient::initialize("ws://nodes.zenon.place:35998").await;
-  println!("is the client connected?: {}", client.is_connected());
+  let client: WsClient = WsClient::initialize("ws://nodes.zenon.place:35998")
+    .await
+    .unwrap();
+    println!("is the client connected?: {}", client.is_connected());
+    assert_eq!(client.is_connected(), true);
 
-  let ps = znn::api::embedded::Pillar::get_all(&client, 1, 10).await;
-  println!("Number of pillars: {}", ps["count"]);
+    let pil: PillarInfoList = znn::api::embedded::Pillar::get_all(&client, 1, 10)
+      .await
+      .unwrap();
+    println!("Number of pillars: {}", pil.count);
 
-  let ai = znn::api::ledger::Ledger::get_account_info_by_address(&client, "[address]");
+    let a = Address {
+        address: "z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string(),
+    };
+    let ai: AccountInfo = znn::api::Ledger::get_account_info_by_address(&client, a)
+      .await
+      .unwrap();
+    dbg!("Account info: {}", ai);
 ```
 
 ## Contributing

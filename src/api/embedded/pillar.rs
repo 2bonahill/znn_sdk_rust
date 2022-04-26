@@ -22,7 +22,7 @@ impl PillarApi {
             )
             .await?;
 
-        let pil: PillarInfoList = serde_json::from_value(serde_json::Value::Object(response))?;
+        let pil: PillarInfoList = PillarInfoList::from_json(response)?;
         Ok(pil)
     }
 }

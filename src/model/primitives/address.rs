@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Address {
-    pub address: String,
+    pub address: String, // TODO: not part of the SDK
 }
 
 impl Address {

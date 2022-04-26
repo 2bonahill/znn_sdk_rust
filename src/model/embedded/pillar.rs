@@ -1,6 +1,22 @@
 use crate::model::primitives::address::Address;
+use anyhow::Result;
 use serde::Deserializer;
 use serde::{Deserialize, Serialize};
+use serde_json::Map;
+use serde_json::Value;
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct PillarInfoList {
+    pub count: u64,
+    pub list: Vec<PillarInfo>,
+}
+
+impl PillarInfoList {
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let pil: PillarInfoList = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(pil)
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 #[allow(non_snake_case)]
@@ -28,12 +44,6 @@ impl PillarInfo {
     pub const unknownType: u64 = 0;
     pub const legacyPillarType: u64 = 1;
     pub const regularPillarType: u64 = 2;
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct PillarInfoList {
-    pub count: u64,
-    pub list: Vec<PillarInfo>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
