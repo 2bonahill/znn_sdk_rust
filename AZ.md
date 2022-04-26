@@ -110,4 +110,4 @@ As proposed by the community, a generous hourly rate of $100 will be applied.
 
 At the current price of roughly $7 per ZNN this makes: 
 
-**=> 12'500 / 6.5 = ZNN 2'000**
+**=> 12'500 / 7 = ZNN 1'800**
