@@ -123,4 +123,4 @@ As proposed by the community, a generous hourly rate of $100 can be applied.
 
 At the current price of roughly $6 per ZNN this makes: 
 
->**=> 10'600 / 6 = ZNN 1'700 and 0 QSR**
+>**=> 10'600 / 6 = ZNN 1'760 and 0 QSR**
