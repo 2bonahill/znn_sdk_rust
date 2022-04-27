@@ -67,7 +67,7 @@ Stats provides 5 endpoints to examine stats and other information about the Node
 
 
 
-# Time estimation
+# Effort estimation
 
 ## Phase 1 (Crypto, Wallet, Key Handling)
 => Crypto primitives and algorithms: 3 days -> 24h
