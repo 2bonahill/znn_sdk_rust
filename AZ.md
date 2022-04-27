@@ -29,6 +29,11 @@ Goal of this phase is to leverage the crypto primitives and to implement the Zen
 - keyStore (setting up the keys, e.g. from mnemonic seed phrases or from entropy)
 - KeyFile (storing, encrypting and decrypting the wallets)
 
+
+### 1.3 PoW
+
+Goal of this phase is to integrate and wrap the C library for the PoW (FFI)
+
 ## Phase 2 - The JSON RPC client
 
 Setting up the client to communicate with the network. First one will be using websockets as the means of transportation.
@@ -69,8 +74,8 @@ Stats provides 5 endpoints to examine stats and other information about the Node
 
 # Effort estimation
 
-## Phase 1 (Crypto, Wallet, Key Handling)
-=> Crypto primitives and algorithms: 3 days -> 24h
+## Phase 1 (Crypto, Wallet, Key Handling, PoW)
+=> Crypto primitives and algorithms / PoW: 3 days -> 24h
 => Wallet: 1 day -> 8h
 
 > **Total phase 1: 32h**
