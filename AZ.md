@@ -69,12 +69,16 @@ Stats provides 5 endpoints to examine stats and other information about the Node
 
 # Time estimation
 
-## Phase 1 (Crypto)
-=> Crypto primitives and algorithms: 4 days -> 32h
-=> Wallet: 2 days -> 16h
+## Phase 1 (Crypto, Wallet, Key Handling)
+=> Crypto primitives and algorithms: 3 days -> 24h
+=> Wallet: 1 day -> 8h
+
+> **Total phase 1: 32h**
 
 ## Phase 2 (JSON-RPC)
 => 0.5 day -> 4h
+
+> **Total phase 2: 4h**
 
 ## Phase 3 (APIs)
 
@@ -89,6 +93,8 @@ Estimation used: 1h per endpoint.
 
 => 48*1h = +- 50h
 
+> **Total phase 3: 50h**
+
 ## Phase 4 - Testing (unit and integration testing)
 
 This phase is not a separated one, because for all the features unit tests will be written in parallel. The goal will be to have a near 100% test coverage for the unit tests. On top of that, integration tests will ensure that end-to-end processes work as specified.
@@ -97,17 +103,19 @@ Unit tests will be an integral part, especially for the strongly typed JSON pars
 
 From experience, testing will be estimated roughly a +25% of the implementation effort.
 
-# Total estimation
+> **Total phase 4: +25% of development effort**
 
-- Total implementation effort: 32 + 16 + 4 + 50 = 100h
-- Testing:  25h
+# Total Effort
 
-**=> Total of roughly 125 hours**
+- Total implementation effort: 32 + 4 + 50 = 86h
+- Testing:  20h
+
+>**=> Total of roughly 106 hours**
 
 As proposed by the community, a generous hourly rate of $100 can be applied.
 
-**=> 125h * 100 = $12'500**
+>**=> 106h * 100 = $10'600**
 
-At the current price of roughly $7 per ZNN this makes: 
+At the current price of roughly $6 per ZNN this makes: 
 
-**=> 12'500 / 7 = ZNN 1'800**
+>**=> 10'600 / 6 = ZNN 1'700**
