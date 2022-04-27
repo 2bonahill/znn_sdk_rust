@@ -75,7 +75,7 @@ Stats provides 5 endpoints to examine stats and other information about the Node
 # Effort estimation
 
 ## Phase 1 (Crypto, Wallet, Key Handling, PoW)
-=> Crypto primitives and algorithms / PoW: 3 days -> 24h
+=> Crypto primitives and algorithms / PoW: 3 days -> 24h \
 => Wallet: 1 day -> 8h
 
 > **Total phase 1: 32h**
