@@ -96,7 +96,7 @@ Estimation used: 0.5h per endpoint.
 
 => 48*0.5h = +- 25h
 
-> **Total phase 3: 50h**
+> **Total phase 3: 25h**
 
 ## Phase 4 - PoW
 
