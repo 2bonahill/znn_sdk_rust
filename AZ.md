@@ -131,7 +131,7 @@ At the current price of roughly $6 per ZNN this makes:
 
 #Duration
 
-As I am a full time employee and a dad I cannot fully work on this project. So my estimation:
+As I am a full time employee and a dad I cannot work full-time on this project. So my estimation:
 
 Duration: Approx. 1 month for phases 1-3 each. Phase 4 might take me approx. 2 weeks
 
