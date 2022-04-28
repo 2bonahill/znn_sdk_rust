@@ -90,7 +90,7 @@ There is a total of 48 endpoints to be implemented. For every endpoint there is 
 - znn::api::embedded::Pillar::get_all(...)
 - znn::api::Ledger::get_account_info_by_address(...)
 
-took a day, but will be much faster because of the repetition involved. 
+took half a day, but will be much faster because of the repetition involved. 
 
 Estimation used: 0.5h per endpoint.
 
