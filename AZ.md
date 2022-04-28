@@ -108,8 +108,6 @@ Integrating the C PoW (FFI) is estimated at roughly 1 day.
 
 This phase is not a separated one, because for all the features unit tests will be written in parallel. The goal will be to have a near 100% test coverage for the unit tests. On top of that, integration tests will ensure that end-to-end processes work as specified.
 
-Unit tests will be an integral part, especially for the strongly typed JSON parsing and error handling. 
-
 From experience, testing will be estimated roughly a +25% of the implementation effort.
 
 > **Total phase 5: +25% of development effort**
