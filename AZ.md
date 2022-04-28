@@ -129,4 +129,10 @@ At the current price of roughly $6 per ZNN this makes:
 
 >**=> 8'600 / 6 = ZNN 1'430 and 0 QSR**
 
-Duration: Approx. 1 month for phases 1-3 each. Phase 4 might take me approx. 2 weeks => 3.5 months.
+#Duration
+
+As I am a full time employee I cannot fully work on this project. So my estimation:
+
+Duration: Approx. 1 month for phases 1-3 each. Phase 4 might take me approx. 2 weeks
+
+>Total => 3.5 months.
