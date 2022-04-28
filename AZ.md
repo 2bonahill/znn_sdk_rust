@@ -127,7 +127,7 @@ At the current price of roughly $6 per ZNN this makes:
 
 >**=> 8'600 / 6 = ZNN 1'430 and 0 QSR**
 
-#Duration
+# Duration
 
 As I am a full time employee and a dad I cannot work full-time on this project. So my estimation:
 
