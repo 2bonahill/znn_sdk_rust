@@ -16,7 +16,7 @@ This phase will cover all crypto related aspects of the SDK:
 This will mainly be the adoption of the algorithms involved:
 - Argon2 (Key derivation and password hashing)
 - EdDSA
-- AES
+- Encryption (AES)
 - The Hash functions
 - Bech32 for the addresses
 - Bip32 (Key structures) and Bip39 (Mnemonic Seed Phrase)
