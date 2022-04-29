@@ -1,7 +1,7 @@
 pub struct KeyPair {
     pub secret_key: Vec<u8>,
     pub public_key: Vec<u8>,
-    _address: Vec<u8>,
+    _address: Vec<u8>, // TODO: this needs to be an address
 }
 
 impl KeyPair {

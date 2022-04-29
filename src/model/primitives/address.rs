@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct Address {
     hrp: String,
     core: Vec<u8>,
-    pub address: String, // TODO: REMOVE, does not belong to the SDK
+    // pub address: String, // TODO: REMOVE, does not belong to the SDK
 }
 
 impl Address {
@@ -16,15 +16,14 @@ impl Address {
     const contractByte: u8 = 1;
     const coreSize: u8 = 20;
 
-    pub fn new(hrp: String, core: Vec<u8>, address: String) -> Self {
-        Self { hrp, core, address }
+    pub fn new(hrp: String, core: Vec<u8>) -> Self {
+        Self { hrp, core }
     }
 
     pub fn from_string(address: String) -> Self {
         Self {
             core: vec![],
             hrp: Address::prefix.to_string(),
-            address: address,
         }
     }
 
@@ -35,26 +34,10 @@ impl Address {
         Ok(address_string)
     }
 
-    pub fn bech_playground() {
-        let encoded = bech32::encode(
-            "bech32",
-            vec![0x00, 0x01, 0x02].to_base32(),
-            Variant::Bech32,
-        )
-        .unwrap();
-        assert_eq!(encoded, "bech321qqqsyrhqy2a".to_string());
-        let (hrp, data, variant) = bech32::decode(&encoded).unwrap();
-        assert_eq!(hrp, "bech32");
-        assert_eq!(
-            Vec::<u8>::from_base32(&data).unwrap(),
-            vec![0x00, 0x01, 0x02]
-        );
-        assert_eq!(variant, Variant::Bech32);
-    }
-
-    /// Get a reference to the address's address.
-    pub fn to_string_old(&self) -> &str {
-        self.address.as_ref()
+    pub fn parse(address: String) -> Result<Self> {
+        let (hrp, data, _) = bech32::decode(&address).unwrap();
+        let core = Vec::<u8>::from_base32(&data).unwrap();
+        Ok(Address::new(hrp, core))
     }
 }
 
@@ -73,8 +56,21 @@ mod tests {
         ]
         .to_vec();
         let address_string = "z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7".to_string();
-        let a: Address = Address::new(hrp, core, "lol".to_string());
+        let a: Address = Address::new(hrp, core);
         assert_eq!(a.to_string()?, address_string);
+        Ok(())
+    }
+
+    #[test]
+    fn test_address_parse() -> Result<()> {
+        let hrp: String = "z".to_string();
+        let core = [
+            0, 37, 55, 74, 65, 159, 50, 115, 111, 97, 236, 197, 172, 64, 89, 210, 241, 181, 136, 77,
+        ]
+        .to_vec();
+        let a: Address = Address::parse("z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7".to_string())?;
+        assert_eq!(a.core, core);
+        assert_eq!(a.hrp, hrp);
         Ok(())
     }
 }

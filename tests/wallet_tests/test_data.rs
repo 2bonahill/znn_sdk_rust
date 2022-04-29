@@ -1,4 +1,6 @@
 pub const MNEMONIC: &str = "route become dream access impulse price inform obtain engage ski believe awful absent pig thing vibrant possible exotic flee pepper marble rural fire fancy";
+pub const HRP: &str = "z";
+pub const ADDRESS_STRING: &str = "z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7";
 
 pub const SEED: [u8; 64] = [
     25, 241, 209, 7, 212, 159, 66, 235, 193, 77, 70, 181, 16, 1, 199, 49, 86, 159, 20, 37, 144,

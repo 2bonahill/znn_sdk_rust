@@ -13,7 +13,7 @@ use znn_sdk_rust::{
 pub async fn test_ws_client() -> Result<()> {
     let client = WsClient::initialize("invalid URL!").await;
     assert_eq!(client.is_err(), true);
-    // TODO
+    // TODO: this is not really a good test
     Ok(())
 }
 
@@ -29,12 +29,10 @@ pub async fn test_pillar_api() -> Result<()> {
 
 #[tokio::test]
 pub async fn test_ledger_api() -> Result<()> {
-    // common::setup();
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
-    let a = Address::from_string("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string());
+    let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string())?;
     let ai: AccountInfo =
         znn_sdk_rust::api::Ledger::get_account_info_by_address(&client, a).await?;
-
     Ok(())
 }
