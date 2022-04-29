@@ -58,6 +58,6 @@ where
     D: Deserializer<'de>,
 {
     let buf: String = String::deserialize(deserializer)?;
-    let address: Address = Address::new(buf.clone());
+    let address: Address = Address::from_string(buf.clone());
     Ok(address)
 }

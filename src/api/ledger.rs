@@ -12,14 +12,15 @@ impl LedgerApi {
         client: &WsClient,
         address: Address,
     ) -> Result<AccountInfo> {
+        let address_string = address.to_string()?;
         let response: Map<String, Value> = client
             .sendRequest(
                 "ledger.getAccountInfoByAddress",
-                vec![serde_json::to_value(address.to_string())?],
+                vec![serde_json::to_value(address.to_string_old())?],
             )
             .await?;
 
-        dbg!("ledger::getAccountInfoByAddress: {}", &response);
+        // dbg!("ledger::getAccountInfoByAddress: {}", &response);
         let ai: AccountInfo = AccountInfo::from_json(response)?;
         Ok(ai)
     }
