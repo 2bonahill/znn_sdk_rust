@@ -68,7 +68,7 @@ impl KeyFile {
         let nonce_random = rand::thread_rng().gen::<[u8; 12]>();
         let nonce = GenericArray::from_slice(&nonce_random);
         let encrypted = cipher
-            .encrypt(nonce, b"plaintext message".as_ref())
+            .encrypt(nonce, &*store.entropy)
             .expect("encryption failure!"); // NOTE: handle this error to avoid panics!
         self.crypto.cipher_data = encrypted;
         self.crypto.nonce = nonce.to_vec();
