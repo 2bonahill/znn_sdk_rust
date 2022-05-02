@@ -16,7 +16,7 @@ This phase will cover all crypto related aspects of the SDK:
 This will mainly be the adoption of the algorithms involved:
 - Argon2 (Key derivation and password hashing)
 - EdDSA
-- AES
+- Encryption (AES)
 - The Hash functions
 - Bech32 for the addresses
 - Bip32 (Key structures) and Bip39 (Mnemonic Seed Phrase)
@@ -90,7 +90,7 @@ There is a total of 48 endpoints to be implemented. For every endpoint there is 
 - znn::api::embedded::Pillar::get_all(...)
 - znn::api::Ledger::get_account_info_by_address(...)
 
-took a day, but will be much faster because of the repetition involved. 
+took half a day, but will be much faster because of the repetition involved. 
 
 Estimation used: 0.5h per endpoint.
 
@@ -107,8 +107,6 @@ Integrating the C PoW (FFI) is estimated at roughly 1 day.
 ## Phase 5 - Testing (unit and integration testing)
 
 This phase is not a separated one, because for all the features unit tests will be written in parallel. The goal will be to have a near 100% test coverage for the unit tests. On top of that, integration tests will ensure that end-to-end processes work as specified.
-
-Unit tests will be an integral part, especially for the strongly typed JSON parsing and error handling. 
 
 From experience, testing will be estimated roughly a +25% of the implementation effort.
 
@@ -129,7 +127,7 @@ At the current price of roughly $6 per ZNN this makes:
 
 >**=> 8'600 / 6 = ZNN 1'430 and 0 QSR**
 
-#Duration
+# Duration
 
 As I am a full time employee and a dad I cannot work full-time on this project. So my estimation:
 
