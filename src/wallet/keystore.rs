@@ -1,5 +1,5 @@
 use super::keypair::KeyPair;
-use crate::crypto::crypto;
+use crate::{crypto::crypto, model::primitives::address::Address};
 use anyhow::Result;
 use bip39::*;
 
@@ -53,12 +53,11 @@ impl KeyStore {
     pub fn get_keypair(&self) -> Result<KeyPair> {
         // BIP44 https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
         // m / purpose' / coin_type' / account' / change / address_index
-        let (secret_key, public_key, address) =
+        let (secret_key, public_key, address_core) =
             crypto::derive_key("m/44'/73404'/0'".to_string(), &self.seed)?;
-        Ok(KeyPair::new(secret_key, public_key, address))
+        let a: Address = Address::new("z".to_string(), address_core);
+        Ok(KeyPair::new(secret_key, public_key, a))
     }
-
-    pub fn test(&self) {}
 }
 
 #[cfg(test)]

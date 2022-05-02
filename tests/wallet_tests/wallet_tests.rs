@@ -15,7 +15,7 @@ pub fn test_keystore() -> Result<()> {
     let keypair: KeyPair = keystore.get_keypair()?;
     let secret_key: &Vec<u8> = keypair.get_secret_key();
     let public_key: &Vec<u8> = keypair.get_public_key();
-    let address: &Vec<u8> = keypair.address();
+    let address: &Vec<u8> = keypair.address().get_bytes();
 
     assert_eq!(secret_key, &test_data::SECRET_KEKY);
     assert_eq!(public_key, &test_data::PUBLIC_KEY);

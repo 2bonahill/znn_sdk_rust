@@ -1,11 +1,13 @@
+use crate::model::primitives::address::Address;
+
 pub struct KeyPair {
     pub secret_key: Vec<u8>,
     pub public_key: Vec<u8>,
-    _address: Vec<u8>, // TODO: this needs to be an address
+    _address: Address,
 }
 
 impl KeyPair {
-    pub fn new(secret_key: Vec<u8>, public_key: Vec<u8>, _address: Vec<u8>) -> Self {
+    pub fn new(secret_key: Vec<u8>, public_key: Vec<u8>, _address: Address) -> Self {
         Self {
             secret_key,
             public_key,
@@ -14,15 +16,15 @@ impl KeyPair {
     }
 
     pub fn get_secret_key(&self) -> &Vec<u8> {
-        self.secret_key.as_ref()
+        &self.secret_key
     }
 
     pub fn get_public_key(&self) -> &Vec<u8> {
-        self.public_key.as_ref()
+        &self.public_key
     }
 
-    pub fn address(&self) -> &Vec<u8> {
+    pub fn address(&self) -> &Address {
         // TODO: check if address is null -> if so, create it
-        self._address.as_ref()
+        &self._address
     }
 }

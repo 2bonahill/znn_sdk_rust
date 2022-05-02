@@ -9,7 +9,7 @@ pub fn derive_key(path: String, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec
 
     let secret_key: [u8; 32] = extended_secret_key.secret_key.to_bytes();
     let public_key: [u8; 32] = extended_secret_key.public_key().to_bytes();
-    let address: Vec<u8> = derive_address_from_public_key(&public_key);
+    let address: Vec<u8> = derive_address_bytes_from_public_key(&public_key);
 
     Ok((secret_key.into(), public_key.into(), address.into()))
 }
@@ -18,7 +18,7 @@ fn parse_derivation_path(path: &str) -> Result<DerivationPath> {
     Ok(path.parse::<DerivationPath>()?)
 }
 
-fn derive_address_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
+pub fn derive_address_bytes_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
     let mut hasher = Sha3_256::new();
     hasher.update(public_key);
     let mut hash: Vec<u8> = hasher.finalize().to_vec();
