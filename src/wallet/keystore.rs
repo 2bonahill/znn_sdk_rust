@@ -3,7 +3,7 @@ use crate::{crypto::crypto, model::primitives::address::Address};
 use anyhow::Result;
 use bip39::*;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct KeyStore {
     pub entropy: Vec<u8>,
     pub mnemonic: String,

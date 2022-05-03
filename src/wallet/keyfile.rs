@@ -47,8 +47,6 @@ impl KeyFile {
     }
 
     fn _encrypt_entropy(&mut self, store: KeyStore, password: String) {
-        let salt = rand::thread_rng().gen::<[u8; 16]>();
-
         let config = Config {
             variant: Variant::Argon2id,
             version: Version::Version13,
@@ -60,19 +58,48 @@ impl KeyFile {
             ad: &[],
             hash_length: 32,
         };
+        let salt = rand::thread_rng().gen::<[u8; 16]>();
         let hash = argon2::hash_raw(password.as_bytes(), &salt, &config).unwrap();
 
-        // encrypt entropy using the argon2 pwd hash
+        // generate key using the argon2 pwd hash
         let key = Key::from_slice(&hash);
         let cipher = Aes256Gcm::new(key);
         let nonce_random = rand::thread_rng().gen::<[u8; 12]>();
         let nonce = GenericArray::from_slice(&nonce_random);
         let encrypted = cipher
-            .encrypt(nonce, &*store.entropy)
+            .encrypt(nonce, store.entropy.as_ref())
             .expect("encryption failure!"); // NOTE: handle this error to avoid panics!
         self.crypto.cipher_data = encrypted;
         self.crypto.nonce = nonce.to_vec();
         self.crypto.argon2_params.salt = salt.to_vec();
+    }
+
+    pub async fn decrypt(keyfile: KeyFile, password: String) -> Result<KeyStore> {
+        let config = Config {
+            variant: Variant::Argon2id,
+            version: Version::Version13,
+            mem_cost: 64 * 1024,
+            time_cost: 1,
+            lanes: 4,
+            thread_mode: ThreadMode::Parallel,
+            secret: &[],
+            ad: &[],
+            hash_length: 32,
+        };
+        let salt = keyfile.crypto.argon2_params.salt;
+        let hash = argon2::hash_raw(password.as_bytes(), &salt, &config).unwrap();
+
+        // generate key using the argon2 pwd hash
+        let key = Key::from_slice(&hash);
+        let cipher = Aes256Gcm::new(key);
+        let nonce = GenericArray::from_slice(keyfile.crypto.nonce.as_slice());
+
+        let ciphertext = &keyfile.crypto.cipher_data[..];
+        let plaintext = cipher
+            .decrypt(nonce, ciphertext)
+            .expect("decryption failure!"); // NOTE: handle this error to avoid panics!
+        let ks = KeyStore::from_entropy(plaintext)?;
+        Ok(ks)
     }
 }
 
