@@ -1,8 +1,9 @@
 use super::keystore::KeyStore;
+use crate::error::Error;
 use crate::model::primitives::address::Address;
 use aes_gcm::aead::generic_array::GenericArray;
 use aes_gcm::aead::{Aead, NewAead};
-use aes_gcm::{Aes256Gcm, Key, Nonce}; // Or `Aes128Gcm`
+use aes_gcm::{Aes256Gcm, Key}; // Or `Aes128Gcm`
 use anyhow::Result;
 use argon2::{self, Config, ThreadMode, Variant, Version};
 use rand::Rng;
@@ -26,9 +27,10 @@ impl KeyFile {
         }
     }
 
-    pub async fn encrypt(store: KeyStore, password: String) -> Result<KeyFile> {
+    pub async fn encrypt(store: KeyStore, password: String) -> Result<KeyFile, Error> {
         let timestamp = SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)?
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
             .as_secs();
         let base_address = store.get_keypair()?.address().clone();
         let version = 1;
@@ -42,11 +44,11 @@ impl KeyFile {
         );
 
         let mut stored: KeyFile = KeyFile::new(base_address, _crypto, timestamp, version);
-        stored._encrypt_entropy(store, password);
+        stored.encrypt_entropy(store, password)?;
         Ok(stored)
     }
 
-    fn _encrypt_entropy(&mut self, store: KeyStore, password: String) {
+    fn encrypt_entropy(&mut self, store: KeyStore, password: String) -> Result<(), Error> {
         let config = Config {
             variant: Variant::Argon2id,
             version: Version::Version13,
@@ -66,15 +68,14 @@ impl KeyFile {
         let cipher = Aes256Gcm::new(key);
         let nonce_random = rand::thread_rng().gen::<[u8; 12]>();
         let nonce = GenericArray::from_slice(&nonce_random);
-        let encrypted = cipher
-            .encrypt(nonce, store.entropy.as_ref())
-            .expect("encryption failure!"); // NOTE: handle this error to avoid panics!
+        let encrypted = cipher.encrypt(nonce, store.entropy.as_ref())?;
         self.crypto.cipher_data = encrypted;
         self.crypto.nonce = nonce.to_vec();
         self.crypto.argon2_params.salt = salt.to_vec();
+        Ok(())
     }
 
-    pub async fn decrypt(keyfile: KeyFile, password: String) -> Result<KeyStore> {
+    pub async fn decrypt(keyfile: KeyFile, password: String) -> Result<KeyStore, Error> {
         let config = Config {
             variant: Variant::Argon2id,
             version: Version::Version13,
@@ -94,15 +95,14 @@ impl KeyFile {
         let cipher = Aes256Gcm::new(key);
         let nonce = GenericArray::from_slice(keyfile.crypto.nonce.as_slice());
 
-        let ciphertext = &keyfile.crypto.cipher_data[..];
-        let plaintext = cipher
-            .decrypt(nonce, ciphertext)
-            .expect("decryption failure!"); // NOTE: handle this error to avoid panics!
+        let ciphertext: &[u8] = &keyfile.crypto.cipher_data[..];
+        let plaintext: Vec<u8> = cipher.decrypt(nonce, ciphertext)?;
         let ks = KeyStore::from_entropy(plaintext)?;
         Ok(ks)
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Default)]
 pub struct _Crypto {
     argon2_params: _Argon2Params,
@@ -147,17 +147,17 @@ mod tests {
 
     use crate::wallet::keyfile::KeyFile;
     use crate::wallet::keystore::KeyStore;
+    use crate::wallet::utils::unit_test_data::ENTROPY;
+
     #[tokio::test]
     async fn test_keystore_encryption() -> Result<()> {
-        const ENTROPY: [u8; 32] = [
-            188, 130, 125, 10, 0, 167, 35, 84, 220, 228, 196, 74, 89, 72, 82, 136, 80, 11, 73, 56,
-            47, 155, 168, 138, 1, 99, 81, 120, 123, 123, 21, 202,
-        ];
         let ks: KeyStore = KeyStore::from_entropy(ENTROPY.to_vec()).unwrap();
-        dbg!(&ks);
-        let kf = KeyFile::encrypt(ks, "pwd".to_string()).await?;
-        dbg!(&kf);
-        assert_eq!(1, 1);
+        let kf: KeyFile = KeyFile::encrypt(ks, "pwd".to_string()).await?;
+
+        assert!(kf.crypto.argon2_params.salt.len() > 1);
+        assert!(kf.crypto.cipher_data.len() > 1);
+        assert!(kf.crypto.nonce.len() > 1);
+
         Ok(())
     }
 }

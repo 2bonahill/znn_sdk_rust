@@ -22,7 +22,7 @@ pub async fn test_pillar_api() -> Result<()> {
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
 
-    let pil: PillarInfoList = znn_sdk_rust::api::embedded::Pillar::get_all(&client, 1, 3).await?;
+    let _pil: PillarInfoList = znn_sdk_rust::api::embedded::Pillar::get_all(&client, 1, 3).await?;
 
     Ok(())
 }
@@ -32,7 +32,7 @@ pub async fn test_ledger_api() -> Result<()> {
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
     let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string())?;
-    let ai: AccountInfo =
+    let _ai: AccountInfo =
         znn_sdk_rust::api::Ledger::get_account_info_by_address(&client, a).await?;
     Ok(())
 }

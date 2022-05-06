@@ -8,9 +8,12 @@ pub struct TokenStandard {
     pub tokenStandard: String, // TODO: not part of the SDK
 }
 
+#[allow(dead_code)]
 impl TokenStandard {
-    pub fn new(tokenStandard: String) -> Self {
-        Self { tokenStandard }
+    pub fn new(token_standard: String) -> Self {
+        Self {
+            tokenStandard: token_standard,
+        }
     }
 
     const PREFIX: &'static str = "zts";

@@ -3,7 +3,9 @@ use ed25519_dalek_bip32::DerivationPath;
 use ed25519_dalek_bip32::ExtendedSecretKey;
 use sha3::{Digest, Sha3_256};
 
-pub fn derive_key(path: String, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>)> {
+use crate::error::Error;
+
+pub fn derive_key(path: String, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>), Error> {
     let dp: DerivationPath = parse_derivation_path(&path)?;
     let extended_secret_key: ExtendedSecretKey = ExtendedSecretKey::from_seed(seed)?.derive(&dp)?;
 

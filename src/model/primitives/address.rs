@@ -10,21 +10,22 @@ pub struct Address {
     core: Vec<u8>,
 }
 
+#[allow(dead_code)]
 impl Address {
-    const prefix: &'static str = "z";
-    const addressLength: u8 = 40;
-    const userByte: u8 = 0;
-    const contractByte: u8 = 1;
-    const coreSize: u8 = 20;
+    const PREFIX: &'static str = "z";
+    const ADDRESS_LENGTH: u8 = 40;
+    const USER_BYTE: u8 = 0;
+    const CONTRACT_BYTE: u8 = 1;
+    const CORE_SIZE: u8 = 20;
 
     pub fn new(hrp: String, core: Vec<u8>) -> Self {
         Self { hrp, core }
     }
 
-    pub fn from_string(address: String) -> Self {
+    pub fn from_string(_address: String) -> Self {
         Self {
             core: vec![],
-            hrp: Address::prefix.to_string(),
+            hrp: Address::PREFIX.to_string(),
         }
     }
 
