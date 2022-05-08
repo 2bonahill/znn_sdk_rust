@@ -5,7 +5,7 @@ use znn_sdk_rust::wallet::{keyfile::KeyFile, keypair::KeyPair, keystore::KeyStor
 use crate::wallet_tests::test_data;
 
 #[test]
-pub fn test_keystore() -> Result<()> {
+pub fn test_keystore_from_mnemonic() -> Result<()> {
     let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
 
     assert_eq!(keystore.entropy, test_data::ENTROPY);
