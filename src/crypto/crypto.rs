@@ -1,3 +1,4 @@
+use ed25519_dalek::ExpandedSecretKey;
 use ed25519_dalek::PublicKey;
 use ed25519_dalek::SecretKey;
 use ed25519_dalek_bip32::DerivationPath;
@@ -32,6 +33,12 @@ pub fn derive_address_bytes_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
     hash.insert(0, 0u8);
     hash.truncate(20);
     hash
+}
+
+pub fn sign(message: Vec<u8>, secret_key: Vec<u8>, public_key: Vec<u8>) -> Result<Vec<u8>, Error> {
+    let key_pair = ExpandedSecretKey::from(&SecretKey::from_bytes(&secret_key)?);
+    let signed = key_pair.sign(&message, &PublicKey::from_bytes(&public_key)?);
+    Ok(signed.to_bytes().to_vec())
 }
 
 fn parse_derivation_path(path: &str) -> Result<DerivationPath, Error> {

@@ -37,3 +37,12 @@ pub async fn test_keyfile() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_keyfile_sign() -> Result<()> {
+    let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
+    let key_pair: KeyPair = keystore.get_keypair()?;
+    let signed = key_pair.sign(test_data::MESSAGE_RAW.as_bytes().to_vec())?;
+    assert_eq!(signed, test_data::MESSAGE_SIGNED);
+    Ok(())
+}
