@@ -2,6 +2,7 @@ use super::keypair::KeyPair;
 use crate::{crypto::crypto, error::Error, model::primitives::address::Address};
 use anyhow::Result;
 use bip39::*;
+use rand::Rng;
 
 #[derive(Debug, Default, Clone)]
 pub struct KeyStore {
@@ -27,6 +28,12 @@ impl KeyStore {
         let mut s: KeyStore = KeyStore::default();
         s.set_entropy(entropy)?;
         Ok(s)
+    }
+
+    pub fn new_random() -> Result<Self> {
+        let entropy: [u8; 32] = rand::thread_rng().gen();
+        let ks: KeyStore = KeyStore::from_entropy(entropy.to_vec())?;
+        Ok(ks)
     }
 
     fn set_mnemonic(&mut self, mnemonic: String) -> Result<(), Error> {
@@ -67,6 +74,7 @@ mod tests {
         utils::unit_test_data::{ENTROPY, MNEMONIC, SEED},
     };
     use anyhow::Result;
+    use bip39::*;
 
     #[test]
     fn test_keystore_from_mnemonic() -> Result<()> {
@@ -74,6 +82,19 @@ mod tests {
         assert_eq!(key_store.mnemonic, MNEMONIC);
         assert_eq!(key_store.seed, SEED);
         assert_eq!(key_store.entropy, ENTROPY);
+        Ok(())
+    }
+
+    #[test]
+    fn test_new_random() -> Result<()> {
+        let ks1: KeyStore = KeyStore::new_random()?;
+        assert!(Mnemonic::validate(&ks1.mnemonic, Language::English).is_ok());
+
+        let ks2: KeyStore = KeyStore::from_entropy(ks1.entropy.clone())?;
+
+        assert_eq!(ks1.mnemonic, ks2.mnemonic);
+        assert_eq!(ks1.seed, ks2.seed);
+        assert_eq!(ks1.entropy, ks2.entropy);
         Ok(())
     }
 }
