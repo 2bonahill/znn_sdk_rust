@@ -1,6 +1,7 @@
 use ed25519_dalek::ExpandedSecretKey;
 use ed25519_dalek::PublicKey;
 use ed25519_dalek::SecretKey;
+use ed25519_dalek::Signature;
 use ed25519_dalek_bip32::DerivationPath;
 use ed25519_dalek_bip32::ExtendedSecretKey;
 use sha3::{Digest, Sha3_256};
@@ -39,6 +40,12 @@ pub fn sign(message: Vec<u8>, secret_key: Vec<u8>, public_key: Vec<u8>) -> Resul
     let key_pair = ExpandedSecretKey::from(&SecretKey::from_bytes(&secret_key)?);
     let signed = key_pair.sign(&message, &PublicKey::from_bytes(&public_key)?);
     Ok(signed.to_bytes().to_vec())
+}
+
+pub fn verify(signature: Vec<u8>, message: Vec<u8>, public_key: Vec<u8>) -> Result<(), Error> {
+    let pk: PublicKey = PublicKey::from_bytes(&public_key)?;
+    let s: Signature = Signature::from_bytes(&signature)?;
+    Ok(pk.verify_strict(&message, &s)?)
 }
 
 fn parse_derivation_path(path: &str) -> Result<DerivationPath, Error> {

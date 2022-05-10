@@ -39,10 +39,16 @@ pub async fn test_keyfile() -> Result<()> {
 }
 
 #[tokio::test]
-pub async fn test_keyfile_sign() -> Result<()> {
+pub async fn test_keyfile_sign_verify() -> Result<()> {
     let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
     let key_pair: KeyPair = keystore.get_keypair()?;
     let signed = key_pair.sign(test_data::MESSAGE_RAW.as_bytes().to_vec())?;
     assert_eq!(signed, test_data::MESSAGE_SIGNED);
+
+    let verification = key_pair.verify(signed.clone(), test_data::MESSAGE_RAW.as_bytes().to_vec());
+    assert!(verification.is_ok());
+
+    let failing_verification = key_pair.verify(signed.clone(), b"This can't be right".to_vec());
+    assert!(failing_verification.is_err());
     Ok(())
 }
