@@ -4,6 +4,7 @@ pub mod client;
 pub mod crypto;
 pub mod embedded;
 pub mod error;
+pub mod global;
 pub mod model;
 pub mod pow;
 pub mod utils;

@@ -18,6 +18,9 @@ pub enum Error {
     #[error("Failed to get public key from secret key: '{0}'")]
     DerivePublicKeyFromSecretKeyError(#[from] ed25519_dalek::ed25519::Error),
 
+    #[error("Failed to get default path '{0}'")]
+    FailedGettingPath(String),
+
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }
