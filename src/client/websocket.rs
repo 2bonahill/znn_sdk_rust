@@ -18,8 +18,7 @@ impl WsClient {
         self.client.is_connected()
     }
 
-    #[allow(non_snake_case)]
-    pub async fn sendRequest(
+    pub async fn send_request(
         &self,
         method: &str,
         params: Vec<Value>,

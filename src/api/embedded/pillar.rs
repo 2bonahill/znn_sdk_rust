@@ -13,7 +13,7 @@ impl PillarApi {
         page_size: u8,
     ) -> Result<PillarInfoList> {
         let response: Map<String, Value> = client
-            .sendRequest(
+            .send_request(
                 "embedded.pillar.getAll",
                 vec![
                     serde_json::to_value(page_index)?,

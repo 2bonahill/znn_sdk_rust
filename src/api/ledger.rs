@@ -14,7 +14,7 @@ impl LedgerApi {
     ) -> Result<AccountInfo> {
         let address_string = address.to_string()?;
         let response: Map<String, Value> = client
-            .sendRequest(
+            .send_request(
                 "ledger.getAccountInfoByAddress",
                 vec![serde_json::to_value(address_string)?],
             )

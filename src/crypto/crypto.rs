@@ -8,7 +8,7 @@ use sha3::{Digest, Sha3_256};
 
 use crate::error::Error;
 
-pub fn derive_key(path: String, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>), Error> {
+pub fn derive_key(path: &str, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>), Error> {
     let dp: DerivationPath = parse_derivation_path(&path)?;
     let extended_secret_key: ExtendedSecretKey = ExtendedSecretKey::from_seed(seed)?.derive(&dp)?;
 
@@ -36,9 +36,13 @@ pub fn derive_address_bytes_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
     hash
 }
 
-pub fn sign(message: Vec<u8>, secret_key: Vec<u8>, public_key: Vec<u8>) -> Result<Vec<u8>, Error> {
-    let key_pair = ExpandedSecretKey::from(&SecretKey::from_bytes(&secret_key)?);
-    let signed = key_pair.sign(&message, &PublicKey::from_bytes(&public_key)?);
+pub fn sign(
+    message: &Vec<u8>,
+    secret_key: &Vec<u8>,
+    public_key: &Vec<u8>,
+) -> Result<Vec<u8>, Error> {
+    let key_pair = ExpandedSecretKey::from(&SecretKey::from_bytes(secret_key)?);
+    let signed = key_pair.sign(message, &PublicKey::from_bytes(public_key)?);
     Ok(signed.to_bytes().to_vec())
 }
 
@@ -66,8 +70,7 @@ mod tests {
 
     #[test]
     fn test_derive_key() -> Result<(), Error> {
-        let (secret_key, public_key, address) =
-            crypto::derive_key(PATH.to_string(), &SEED.to_vec())?;
+        let (secret_key, public_key, address) = crypto::derive_key(&PATH, &SEED.to_vec())?;
         assert_eq!(secret_key, SECRET_KEY);
         assert_eq!(public_key, PUBLIC_KEY);
         assert_eq!(address, ADDRESS);

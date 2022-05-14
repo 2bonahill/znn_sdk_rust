@@ -31,12 +31,8 @@ impl KeyPair {
         &self._address
     }
 
-    pub fn sign(&self, message: Vec<u8>) -> Result<Vec<u8>, Error> {
-        Ok(sign(
-            message,
-            self.secret_key.clone(),
-            self.public_key.clone(),
-        )?)
+    pub fn sign(&self, message: &Vec<u8>) -> Result<Vec<u8>, Error> {
+        Ok(sign(message, &self.secret_key, &self.public_key)?)
     }
 
     pub fn verify(&self, signature: Vec<u8>, message: Vec<u8>) -> Result<(), Error> {

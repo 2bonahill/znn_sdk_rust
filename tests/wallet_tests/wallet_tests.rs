@@ -42,7 +42,7 @@ pub async fn test_keyfile() -> Result<()> {
 pub async fn test_keyfile_sign_verify() -> Result<()> {
     let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
     let key_pair: KeyPair = keystore.get_keypair()?;
-    let signed = key_pair.sign(test_data::MESSAGE_RAW.as_bytes().to_vec())?;
+    let signed = key_pair.sign(&test_data::MESSAGE_RAW.as_bytes().to_vec())?;
     assert_eq!(signed, test_data::MESSAGE_SIGNED);
 
     let verification = key_pair.verify(signed.clone(), test_data::MESSAGE_RAW.as_bytes().to_vec());
