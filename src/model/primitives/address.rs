@@ -33,7 +33,7 @@ impl Address {
         let core = crypto::crypto::derive_address_bytes_from_public_key(&public_key);
         Ok(Self {
             hrp: 'z'.to_string(),
-            core: core,
+            core,
         })
     }
 

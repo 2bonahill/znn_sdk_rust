@@ -1,5 +1,3 @@
-use anyhow::Ok;
-
 use super::keystore::KeyStore;
 use crate::error::Error;
 use std::path::PathBuf;
@@ -17,6 +15,7 @@ impl KeyStoreManager {
         }
     }
 
+    #[allow(unused_variables)]
     pub fn save_keystore(store: KeyStore, password: &str, name: &str) -> Result<(), Error> {
         todo!();
         // Ok(())

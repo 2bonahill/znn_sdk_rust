@@ -8,15 +8,17 @@ use sha3::{Digest, Sha3_256};
 
 use crate::error::Error;
 
-pub fn derive_key(path: &str, seed: &Vec<u8>) -> Result<(Vec<u8>, Vec<u8>, Vec<u8>), Error> {
-    let dp: DerivationPath = parse_derivation_path(&path)?;
+pub type KeySet = (Vec<u8>, Vec<u8>, Vec<u8>);
+
+pub fn derive_key(path: &str, seed: &[u8]) -> Result<KeySet, Error> {
+    let dp: DerivationPath = parse_derivation_path(path)?;
     let extended_secret_key: ExtendedSecretKey = ExtendedSecretKey::from_seed(seed)?.derive(&dp)?;
 
     let secret_key: [u8; 32] = extended_secret_key.secret_key.to_bytes();
     let public_key: [u8; 32] = extended_secret_key.public_key().to_bytes();
     let address: Vec<u8> = derive_address_bytes_from_public_key(&public_key);
 
-    Ok((secret_key.into(), public_key.into(), address.into()))
+    Ok((secret_key.into(), public_key.into(), address))
 }
 
 pub fn get_public_key(secret_key: &[u8; 32]) -> Result<[u8; 32], Error> {
@@ -36,11 +38,7 @@ pub fn derive_address_bytes_from_public_key(public_key: &[u8; 32]) -> Vec<u8> {
     hash
 }
 
-pub fn sign(
-    message: &Vec<u8>,
-    secret_key: &Vec<u8>,
-    public_key: &Vec<u8>,
-) -> Result<Vec<u8>, Error> {
+pub fn sign(message: &[u8], secret_key: &[u8], public_key: &[u8]) -> Result<Vec<u8>, Error> {
     let key_pair = ExpandedSecretKey::from(&SecretKey::from_bytes(secret_key)?);
     let signed = key_pair.sign(message, &PublicKey::from_bytes(public_key)?);
     Ok(signed.to_bytes().to_vec())
