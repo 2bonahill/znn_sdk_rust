@@ -1,6 +1,9 @@
 use anyhow::Result;
 use pretty_assertions::assert_eq;
-use znn_sdk_rust::wallet::{keyfile::KeyFile, keypair::KeyPair, keystore::KeyStore};
+use znn_sdk_rust::{
+    error::Error,
+    wallet::{keyfile::KeyFile, keypair::KeyPair, keystore::KeyStore, manager::KeyStoreManager},
+};
 
 use crate::wallet_tests::test_data;
 
@@ -25,7 +28,7 @@ pub fn test_keystore_from_mnemonic() -> Result<()> {
 }
 
 #[tokio::test]
-pub async fn test_keyfile() -> Result<()> {
+pub async fn test_keyfile_encryption() -> Result<()> {
     let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
     let encrypted_kf: KeyFile =
         KeyFile::encrypt(keystore.clone(), "my password".to_string()).await?;
@@ -50,5 +53,13 @@ pub async fn test_keyfile_sign_verify() -> Result<()> {
 
     let failing_verification = key_pair.verify(signed.clone(), b"This can't be right".to_vec());
     assert!(failing_verification.is_err());
+    Ok(())
+}
+
+#[tokio::test]
+pub async fn test_manager_save_keystore() -> Result<(), Error> {
+    let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
+    let x = KeyStoreManager::save_keystore(&keystore, "my pwd", "hi").await?;
+
     Ok(())
 }

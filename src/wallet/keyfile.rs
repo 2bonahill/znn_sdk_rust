@@ -6,10 +6,13 @@ use aes_gcm::aead::{Aead, NewAead};
 use aes_gcm::{Aes256Gcm, Key}; // Or `Aes128Gcm`
 use anyhow::Result;
 use argon2::{self, Config, ThreadMode, Variant, Version};
+use jsonrpsee_core::Serialize;
 use rand::Rng;
+use serde::ser::{SerializeSeq, SerializeStruct};
+use serde::Serializer;
 use std::time::SystemTime;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize)]
 pub struct KeyFile {
     pub base_address: Address,
     pub crypto: _Crypto,
@@ -103,13 +106,23 @@ impl KeyFile {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Serialize)]
 pub struct _Crypto {
     argon2_params: _Argon2Params,
+    #[serde(serialize_with = "serialize_crypto_vec")]
     cipher_data: Vec<u8>,
     cipher_name: String,
     kdf: String,
+    #[serde(serialize_with = "serialize_crypto_vec")]
     nonce: Vec<u8>,
+}
+
+pub fn serialize_crypto_vec<S>(v: &[u8], s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let hex_string = hex::encode(&v);
+    s.serialize_str(&hex_string)
 }
 
 impl _Crypto {
@@ -133,6 +146,17 @@ impl _Crypto {
 #[derive(Debug, Default)]
 pub struct _Argon2Params {
     salt: Vec<u8>,
+}
+
+impl serde::ser::Serialize for _Argon2Params {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut s = serializer.serialize_struct("argon2_params", 1)?;
+        s.serialize_field("salt", &hex::encode(&self.salt))?;
+        s.end()
+    }
 }
 
 impl _Argon2Params {

@@ -1,13 +1,24 @@
 use anyhow::Result;
 use bech32::{self, FromBase32, ToBase32, Variant};
-use serde::{Deserialize, Serialize};
+use serde::{ser::SerializeStruct, Deserialize, Serialize};
 
 use crate::crypto;
 
-#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+#[derive(Deserialize, Debug, Default, Clone)]
 pub struct Address {
     pub hrp: String,
-    core: Vec<u8>,
+    pub core: Vec<u8>,
+}
+
+impl Serialize for Address {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut s = serializer.serialize_struct("Address", 1)?;
+        s.serialize_field("base_address", &self.to_string().unwrap())?;
+        s.end()
+    }
 }
 
 #[allow(dead_code)]
