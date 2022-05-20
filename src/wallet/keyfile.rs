@@ -8,7 +8,7 @@ use anyhow::Result;
 use argon2::{self, Config, ThreadMode, Variant, Version};
 use jsonrpsee_core::Serialize;
 use rand::Rng;
-use serde::ser::{SerializeSeq, SerializeStruct};
+use serde::ser::SerializeStruct;
 use serde::Serializer;
 use std::time::SystemTime;
 

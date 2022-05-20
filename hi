@@ -1,0 +1,1 @@
+{"base_address":{"base_address":"z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7"},"crypto":{"argon2_params":{"salt":"ef7bc27a86fd5509b363f6283a77f72a"},"cipher_data":"17dde56c56a07a274d3af16248a09eb4e9f557743cc1e53663b4e9fe6b9e02b2027cfcbc2ba125f80c70f99750dc20e7","cipher_name":"aes-256-gcm","kdf":"argon2.IDKey","nonce":"5e1edeabfc690d67c13b5c1e"},"timestamp":1653027916,"version":1}

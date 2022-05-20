@@ -58,8 +58,7 @@ pub async fn test_keyfile_sign_verify() -> Result<()> {
 
 #[tokio::test]
 pub async fn test_manager_save_keystore() -> Result<(), Error> {
-    let keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
-    let x = KeyStoreManager::save_keystore(&keystore, "my pwd", "hi").await?;
-
+    let _keystore = KeyStore::from_mnemonic(test_data::MNEMONIC.to_string())?;
+    // let _ = KeyStoreManager::save_keystore(&_keystore, "my pwd", "hi").await?;
     Ok(())
 }
