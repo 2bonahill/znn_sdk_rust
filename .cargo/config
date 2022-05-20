@@ -1,3 +1,0 @@
-[alias]
-to = "test -- --show-output"
-t = "test"
