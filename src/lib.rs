@@ -1,4 +1,3 @@
-pub mod abi;
 pub mod api;
 pub mod client;
 pub mod crypto;
