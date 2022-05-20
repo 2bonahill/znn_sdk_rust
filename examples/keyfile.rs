@@ -14,7 +14,6 @@ async fn keyfile_example() {
     ];
     let ks: KeyStore = KeyStore::from_entropy(entropy.to_vec()).unwrap();
     dbg!(&ks);
-    let kf = KeyFile::encrypt(ks, "pwd".to_string()).await.unwrap();
+    let kf: KeyFile = KeyFile::encrypt(ks, "pwd".to_string()).await.unwrap();
     dbg!(&kf);
-    assert_eq!(1, 1);
 }

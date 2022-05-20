@@ -11,8 +11,6 @@ use znn::{
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     api_example().await;
-    // api_example().await;
-    // keyfile_example().await;
 }
 
 async fn api_example() {
