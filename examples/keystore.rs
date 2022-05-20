@@ -5,8 +5,6 @@ use znn::wallet::{keypair::KeyPair, keystore::KeyStore};
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     keystore_example().await;
-    // api_example().await;
-    // keyfile_example().await;
 }
 
 async fn keystore_example() {
