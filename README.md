@@ -19,6 +19,8 @@ To start using this library, edit the `Cargo.toml` by adding the following lines
 
 ## Examples
 
+You can find all [examples](./examples) in the examples folder.
+
 ### Example 1 - Key handling
 ```rust
   use znn_sdk_rust as znn;
