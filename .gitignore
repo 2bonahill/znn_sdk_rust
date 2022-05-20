@@ -1,2 +1,5 @@
 /target
 Cargo.lock
+
+# ignore test setup params for cargo
+.cargo
