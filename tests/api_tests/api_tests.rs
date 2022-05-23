@@ -31,7 +31,7 @@ pub async fn test_pillar_api() -> Result<()> {
 pub async fn test_ledger_api() -> Result<()> {
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
-    let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string())?;
+    let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402")?;
     let _ai: AccountInfo =
         znn_sdk_rust::api::Ledger::get_account_info_by_address(&client, a).await?;
     Ok(())

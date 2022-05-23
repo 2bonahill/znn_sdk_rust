@@ -1,3 +1,4 @@
+use crate::error::Error;
 use anyhow::Result;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_ws_client::{types::ParamsSer, WsClientBuilder};
@@ -8,7 +9,7 @@ pub struct WsClient {
 }
 
 impl WsClient {
-    pub async fn initialize(url: &str) -> Result<Self> {
+    pub async fn initialize(url: &str) -> Result<Self, Error> {
         Ok(Self {
             client: WsClientBuilder::default().build(url).await?,
         })
@@ -22,7 +23,7 @@ impl WsClient {
         &self,
         method: &str,
         params: Vec<Value>,
-    ) -> Result<serde_json::Map<String, serde_json::Value>> {
+    ) -> Result<serde_json::Map<String, serde_json::Value>, Error> {
         let parameters = {
             let mut parameters = Vec::new();
 

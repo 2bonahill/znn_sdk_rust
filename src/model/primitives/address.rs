@@ -48,8 +48,8 @@ impl Address {
         })
     }
 
-    pub fn parse(address: String) -> Result<Self> {
-        let (hrp, data, _) = bech32::decode(&address).unwrap();
+    pub fn parse(address: &str) -> Result<Self> {
+        let (hrp, data, _) = bech32::decode(address).unwrap();
         let core = Vec::<u8>::from_base32(&data).unwrap();
         Ok(Address::new(hrp, core))
     }
@@ -93,7 +93,7 @@ mod tests {
             0, 37, 55, 74, 65, 159, 50, 115, 111, 97, 236, 197, 172, 64, 89, 210, 241, 181, 136, 77,
         ]
         .to_vec();
-        let a: Address = Address::parse("z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7".to_string())?;
+        let a: Address = Address::parse("z1qqjnwjjpnue8xmmpanz6csze6tcmtzzdtfsww7")?;
         assert_eq!(a.core, core);
         assert_eq!(a.hrp, hrp);
         Ok(())

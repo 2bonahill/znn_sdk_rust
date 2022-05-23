@@ -24,6 +24,9 @@ pub enum Error {
     #[error("Failed to get default path '{0}'")]
     FailedGettingPath(String),
 
+    #[error("Error from websocket rpc client : '{0}'")]
+    WebSocketError(#[from] jsonrpsee_core::Error),
+
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }

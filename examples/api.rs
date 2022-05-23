@@ -25,7 +25,7 @@ async fn api_example() {
         .unwrap();
     println!("Number of pillars: {}", pil.count);
 
-    let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402".to_string()).unwrap();
+    let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402").unwrap();
     let ai: AccountInfo = znn::api::Ledger::get_account_info_by_address(&client, a)
         .await
         .unwrap();
