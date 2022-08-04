@@ -1,5 +1,5 @@
 use crate::error::Error;
-use anyhow::Result;
+// use anyhow::Result;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_ws_client::{types::ParamsSer, WsClientBuilder};
 use serde_json::Value;
@@ -50,7 +50,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_initialize() -> Result<()> {
-        let client = WsClient::initialize("ws://nodes.zenon.place:35998").await?;
+        let client = WsClient::initialize("ws://public.deeZNNodez.com:35998").await?;
         assert_eq!(client.is_connected(), true);
         Ok(())
     }
