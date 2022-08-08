@@ -23,7 +23,7 @@ impl WsClient {
         &self,
         method: &str,
         params: Vec<Value>,
-    ) -> Result<serde_json::Map<String, serde_json::Value>, Error> {
+    ) -> Result<serde_json::Value, Error> {
         let parameters = {
             let mut parameters = Vec::new();
 
@@ -35,7 +35,29 @@ impl WsClient {
 
         let response = self
             .client
-            .request::<serde_json::Map<String, _>>(method, parameters)
+            .request::<serde_json::Value>(method, parameters)
+            .await?;
+
+        Ok(response)
+    }
+
+    pub async fn send_request_expect_single_value(
+        &self,
+        method: &str,
+        params: Vec<Value>,
+    ) -> Result<serde_json::Value, Error> {
+        let parameters = {
+            let mut parameters = Vec::new();
+
+            for p in params {
+                parameters.push(p);
+            }
+            Some(ParamsSer::Array(parameters))
+        };
+
+        let response = self
+            .client
+            .request::<serde_json::Value>(method, parameters)
             .await?;
 
         Ok(response)

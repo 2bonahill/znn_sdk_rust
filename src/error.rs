@@ -27,6 +27,9 @@ pub enum Error {
     #[error("Error from websocket rpc client : '{0}'")]
     WebSocketError(#[from] jsonrpsee_core::Error),
 
+    #[error("Error parsing JSON : '{0}'")]
+    SerdeJsonError(#[from] serde_json::Error),
+
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }

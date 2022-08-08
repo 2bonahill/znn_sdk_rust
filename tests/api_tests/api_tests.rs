@@ -18,8 +18,8 @@ pub async fn test_ws_client() -> Result<()> {
 }
 
 #[tokio::test]
-pub async fn test_pillar_api() -> Result<()> {
-    let client: WsClient = WsClient::initialize(test_data::TEST_NODE_2).await?;
+pub async fn test_pillar_api_get_all() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
 
     let _pil: PillarInfoList = znn_sdk_rust::api::embedded::Pillar::get_all(&client, 1, 3).await?;
@@ -28,8 +28,17 @@ pub async fn test_pillar_api() -> Result<()> {
 }
 
 #[tokio::test]
+pub async fn test_pillar_api_get_qsr_registration_cost() -> Result<()> {
+    let client = WsClient::initialize(test_data::TEST_NODE).await?;
+    dbg!("hi");
+    let _result: u64 =
+        znn_sdk_rust::api::embedded::Pillar::get_qsr_registration_cost(&client).await?;
+    Ok(())
+}
+
+#[tokio::test]
 pub async fn test_ledger_api() -> Result<()> {
-    let client: WsClient = WsClient::initialize(test_data::TEST_NODE_2).await?;
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
     let a = Address::parse("z1qq0hffeyj0htmnr4gc6grd8zmqfvwzgrydt402")?;
     let _ai: AccountInfo =

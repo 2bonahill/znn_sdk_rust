@@ -1,6 +1,5 @@
 extern crate znn_sdk_rust as znn;
-use jsonrpsee_types::ParamsSer;
-use serde_json::json;
+
 use znn::{
     client::websocket::WsClient,
     model::{
@@ -12,13 +11,10 @@ use znn::{
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     api_example().await;
-    api_call_example().await;
 }
 
 async fn api_example() {
     // check https://deeznnodez.com for good nodes
-    // ws://nodes.zenon.place:35998
-    // ws://public.deeZNNodez.com:35998
     let client: WsClient = WsClient::initialize("ws://public.deeZNNodez.com:35998")
         .await
         .unwrap();
@@ -35,23 +31,4 @@ async fn api_example() {
         .await
         .unwrap();
     dbg!("Account info: {}", ai);
-}
-
-async fn api_call_example() {
-    println!("hallo from generic_api_call");
-    let client = WsClient::initialize("ws://public.deeZNNodez.com:35998")
-        .await
-        .unwrap();
-    // serde_json::to_value(1).unwrap()
-    let r = client
-        .send_request(
-            "embedded.token.getAll",
-            vec![
-                serde_json::to_value(1).unwrap(),
-                serde_json::to_value(2).unwrap(),
-            ],
-        )
-        .await
-        .unwrap();
-    dbg!("Response: {}", r);
 }
