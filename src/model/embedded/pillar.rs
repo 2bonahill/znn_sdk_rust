@@ -44,6 +44,11 @@ impl PillarInfo {
     pub const unknownType: u64 = 0;
     pub const legacyPillarType: u64 = 1;
     pub const regularPillarType: u64 = 2;
+
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let pi = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(pi)
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]

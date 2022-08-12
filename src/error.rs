@@ -30,6 +30,12 @@ pub enum Error {
     #[error("Error parsing JSON : '{0}'")]
     SerdeJsonError(#[from] serde_json::Error),
 
+    #[error("Error parsing String from utf16 : '{0}'")]
+    ParsingFromUtf16Error(#[from] std::string::FromUtf16Error),
+
+    #[error("Error Bech32 : '{0}'")]
+    Bech32Error(#[from] bech32::Error),
+
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }

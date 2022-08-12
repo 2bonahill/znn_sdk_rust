@@ -1,4 +1,4 @@
-use anyhow::Result;
+use crate::error::Error;
 use bech32::{self, FromBase32, ToBase32, Variant};
 use serde::{ser::SerializeStruct, Deserialize, Serialize};
 
@@ -40,7 +40,7 @@ impl Address {
         }
     }
 
-    pub fn from_public_key(public_key: [u8; 32]) -> Result<Self> {
+    pub fn from_public_key(public_key: [u8; 32]) -> Result<Self, Error> {
         let core = crypto::crypto::derive_address_bytes_from_public_key(&public_key);
         Ok(Self {
             hrp: 'z'.to_string(),
@@ -48,7 +48,7 @@ impl Address {
         })
     }
 
-    pub fn parse(address: &str) -> Result<Self> {
+    pub fn parse(address: &str) -> Result<Self, Error> {
         let (hrp, data, _) = bech32::decode(address).unwrap();
         let core = Vec::<u8>::from_base32(&data).unwrap();
         Ok(Address::new(hrp, core))
@@ -58,7 +58,7 @@ impl Address {
         &self.core
     }
 
-    pub fn to_string(&self) -> Result<String> {
+    pub fn to_string(&self) -> Result<String, Error> {
         let bech32 = bech32::encode(&self.hrp, &self.core.to_base32(), Variant::Bech32)?;
         let bech32_utf16 = Vec::from_iter(bech32.encode_utf16());
         let address_string = String::from_utf16(&bech32_utf16)?;

@@ -37,7 +37,7 @@ impl WsClient {
             .client
             .request::<serde_json::Value>(method, parameters)
             .await?;
-
+        // dbg!(&response);
         Ok(response)
     }
 
