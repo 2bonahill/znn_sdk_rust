@@ -66,3 +66,17 @@ pub async fn test_pillar_get_by_owner() -> Result<()> {
     // dbg!(&_ai);
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_pillar_get_by_name() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+    assert_eq!(client.is_connected(), true);
+    let name1 = "SultanOfStaking";
+    let _pi1 = znn_sdk_rust::api::embedded::Pillar::get_by_name(&client, name1).await?;
+    assert_eq!(_pi1.is_some(), true);
+
+    let name2 = "NameThatDoesNotExist!";
+    let _pi2 = znn_sdk_rust::api::embedded::Pillar::get_by_name(&client, name2).await?;
+    assert_eq!(_pi2.is_none(), true);
+    Ok(())
+}
