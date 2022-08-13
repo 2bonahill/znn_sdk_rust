@@ -1,5 +1,6 @@
 use crate::client::websocket::WsClient;
 use crate::error::Error;
+use crate::model::embedded::pillar::DelegationInfo;
 use crate::model::embedded::pillar::PillarInfo;
 use crate::model::embedded::pillar::PillarInfoList;
 use crate::model::primitives::address::Address;
@@ -90,5 +91,20 @@ impl PillarApi {
             return Ok(Some(pi));
         }
         Ok(None)
+    }
+
+    pub async fn get_delegated_pillar(client: &WsClient, address: Address) -> Result<(), Error> {
+        let response: Map<String, Value> = client
+            .send_request(
+                "embedded.pillar.getDelegatedPillar",
+                vec![serde_json::to_value(address.to_string()?)?],
+            )
+            .await?
+            .as_object()
+            .unwrap()
+            .clone();
+        let di: DelegationInfo = DelegationInfo::from_json(response)?;
+        dbg!(&di);
+        Ok(())
     }
 }

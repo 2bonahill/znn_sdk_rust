@@ -46,7 +46,7 @@ impl PillarInfo {
     pub const regularPillarType: u64 = 2;
 
     pub fn from_json(json: Map<String, Value>) -> Result<Self> {
-        let pi = serde_json::from_value(serde_json::Value::Object(json))?;
+        let pi: PillarInfo = serde_json::from_value(serde_json::Value::Object(json))?;
         Ok(pi)
     }
 }
@@ -56,6 +56,21 @@ impl PillarInfo {
 pub struct PillarEpochStats {
     pub producedMomentums: u32,
     pub expectedMomentums: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct DelegationInfo {
+    pub name: String,
+    pub status: u32,
+    pub weight: u64,
+}
+
+impl DelegationInfo {
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let di: DelegationInfo = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(di)
+    }
 }
 
 fn deserialize_address<'de, D>(deserializer: D) -> Result<Address, D::Error>
