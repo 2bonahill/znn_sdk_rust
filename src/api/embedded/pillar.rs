@@ -95,7 +95,10 @@ impl PillarApi {
         Ok(None)
     }
 
-    pub async fn get_delegated_pillar(client: &WsClient, address: Address) -> Result<(), Error> {
+    pub async fn get_delegated_pillar(
+        client: &WsClient,
+        address: Address,
+    ) -> Result<DelegationInfo, Error> {
         let response: Map<String, Value> = client
             .send_request(
                 "embedded.pillar.getDelegatedPillar",
@@ -106,8 +109,7 @@ impl PillarApi {
             .unwrap()
             .clone();
         let di: DelegationInfo = DelegationInfo::from_json(response)?;
-        dbg!(&di);
-        Ok(())
+        Ok(di)
     }
 
     pub async fn get_deposited_qsr(client: &WsClient, address: Address) -> Result<u64, Error> {
@@ -119,7 +121,6 @@ impl PillarApi {
             .await?
             .as_u64()
             .unwrap();
-        // dbg!(&response);
         Ok(response)
     }
 
