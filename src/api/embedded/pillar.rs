@@ -1,5 +1,6 @@
 use crate::client::websocket::WsClient;
 use crate::error::Error;
+use crate::model::embedded::common::RewardHistoryList;
 use crate::model::embedded::common::UncollectedReward;
 use crate::model::embedded::pillar::DelegationInfo;
 use crate::model::embedded::pillar::PillarInfo;
@@ -137,5 +138,28 @@ impl PillarApi {
             .clone();
         let ur: UncollectedReward = UncollectedReward::from_json(response)?;
         Ok(ur)
+    }
+
+    pub async fn get_frontier_reward_by_page(
+        client: &WsClient,
+        address: Address,
+        page_index: u8,
+        page_size: u8,
+    ) -> Result<RewardHistoryList, Error> {
+        let response: Map<String, Value> = client
+            .send_request(
+                "embedded.pillar.getFrontierRewardByPage",
+                vec![
+                    serde_json::to_value(address.to_string()?)?,
+                    serde_json::to_value(page_index)?,
+                    serde_json::to_value(page_size)?,
+                ],
+            )
+            .await?
+            .as_object()
+            .unwrap()
+            .clone();
+        let rhl: RewardHistoryList = RewardHistoryList::from_json(response)?;
+        Ok(rhl)
     }
 }

@@ -21,6 +21,28 @@ impl UncollectedReward {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct RewardHistoryEntry {
+    pub epoch: u64,
+    pub znnAmount: u64,
+    pub qsrAmount: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct RewardHistoryList {
+    pub count: u64,
+    pub list: Vec<RewardHistoryEntry>,
+}
+
+impl RewardHistoryList {
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let rhl: RewardHistoryList = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(rhl)
+    }
+}
+
 fn deserialize_address<'de, D>(deserializer: D) -> Result<Address, D::Error>
 where
     D: Deserializer<'de>,
