@@ -1,5 +1,6 @@
 use crate::client::websocket::WsClient;
 use crate::error::Error;
+use crate::model::embedded::common::UncollectedReward;
 use crate::model::embedded::pillar::DelegationInfo;
 use crate::model::embedded::pillar::PillarInfo;
 use crate::model::embedded::pillar::PillarInfoList;
@@ -119,5 +120,22 @@ impl PillarApi {
             .unwrap();
         // dbg!(&response);
         Ok(response)
+    }
+
+    pub async fn get_uncollected_reward(
+        client: &WsClient,
+        address: Address,
+    ) -> Result<UncollectedReward, Error> {
+        let response: Map<String, Value> = client
+            .send_request(
+                "embedded.pillar.getUncollectedReward",
+                vec![serde_json::to_value(address.to_string()?)?],
+            )
+            .await?
+            .as_object()
+            .unwrap()
+            .clone();
+        let ur: UncollectedReward = UncollectedReward::from_json(response)?;
+        Ok(ur)
     }
 }

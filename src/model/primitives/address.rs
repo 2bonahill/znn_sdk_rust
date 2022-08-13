@@ -33,6 +33,7 @@ impl Address {
         Self { hrp, core }
     }
 
+    // TODO: delete function
     pub fn from_string(_address: String) -> Self {
         Self {
             core: vec![],
