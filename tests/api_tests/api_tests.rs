@@ -89,3 +89,12 @@ pub async fn test_pillar_get_delegated_pillar() -> Result<()> {
     let _ai = znn_sdk_rust::api::embedded::Pillar::get_delegated_pillar(&client, a).await?;
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_pillar_get_deposited_qsr() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+    assert_eq!(client.is_connected(), true);
+    let a = Address::parse("z1qrgr0e2u8y4pg4lzjr3fr62g8q4letyuntcvt5")?;
+    let _ai = znn_sdk_rust::api::embedded::Pillar::get_deposited_qsr(&client, a).await?;
+    Ok(())
+}

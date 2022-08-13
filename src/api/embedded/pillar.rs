@@ -107,4 +107,17 @@ impl PillarApi {
         dbg!(&di);
         Ok(())
     }
+
+    pub async fn get_deposited_qsr(client: &WsClient, address: Address) -> Result<u64, Error> {
+        let response: u64 = client
+            .send_request(
+                "embedded.pillar.getDepositedQsr",
+                vec![serde_json::to_value(address.to_string()?)?],
+            )
+            .await?
+            .as_u64()
+            .unwrap();
+        // dbg!(&response);
+        Ok(response)
+    }
 }
