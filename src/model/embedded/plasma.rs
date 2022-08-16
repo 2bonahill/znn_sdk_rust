@@ -20,6 +20,32 @@ impl PlasmaInfo {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct FusionEntryList {
+    pub qsrAmount: u64,
+    pub count: u64,
+    pub list: Vec<FusionEntry>,
+}
+
+impl FusionEntryList {
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let fel: FusionEntryList = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(fel)
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct FusionEntry {
+    pub qsrAmount: u64,
+    #[serde(deserialize_with = "deserialize_address")]
+    pub beneficiary: Address,
+    pub expirationHeight: u64,
+    pub id: String, //TODO: make proper hash type
+                    // pub isRevocable: bool,
+}
+
 fn deserialize_address<'de, D>(deserializer: D) -> Result<Address, D::Error>
 where
     D: Deserializer<'de>,

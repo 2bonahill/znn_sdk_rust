@@ -131,3 +131,14 @@ pub async fn test_plasma_get() -> Result<()> {
     let _pi = znn_sdk_rust::api::embedded::Plasma::get(&client, a).await?;
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_plasma_get_entries_by_address() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+    assert_eq!(client.is_connected(), true);
+    let a = Address::parse("z1qrgr0e2u8y4pg4lzjr3fr62g8q4letyuntcvt5")?;
+    let _fel =
+        znn_sdk_rust::api::embedded::Plasma::get_entries_by_address(&client, a, 1, 5).await?;
+    // dbg!(&_fel);
+    Ok(())
+}
