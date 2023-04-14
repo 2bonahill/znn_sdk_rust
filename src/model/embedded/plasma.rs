@@ -1,6 +1,7 @@
 use crate::model::primitives::address::Address;
 use anyhow::Result;
 use serde::Deserializer;
+use serde::Serializer;
 use serde::{Deserialize, Serialize};
 use serde_json::Map;
 use serde_json::Value;
@@ -46,6 +47,17 @@ pub struct FusionEntry {
                     // pub isRevocable: bool,
 }
 
+#[derive(Debug, Serialize)]
+#[allow(non_snake_case)]
+pub struct GetRequiredParam {
+    #[serde(serialize_with = "address_serializer")]
+    pub address: Address,
+    pub blockType: u32,
+    #[serde(serialize_with = "address_serializer")]
+    pub toAddress: Address,
+    pub data: Vec<u64>,
+}
+
 fn deserialize_address<'de, D>(deserializer: D) -> Result<Address, D::Error>
 where
     D: Deserializer<'de>,
@@ -53,4 +65,11 @@ where
     let buf: String = String::deserialize(deserializer)?;
     let address: Address = Address::parse(&buf).unwrap();
     Ok(address)
+}
+
+fn address_serializer<S>(a: &Address, s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    s.serialize_str(&a.to_string().unwrap())
 }

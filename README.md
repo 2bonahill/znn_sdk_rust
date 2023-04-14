@@ -4,7 +4,7 @@ Reference implementation for the Zenon SDK for Rust. Compatible with the Zenon A
 
 ## Zenon Accelerator-Z 
 
-The project proposal can be found here: https://github.com/2bonahill/znn_sdk_rust/blob/main/AZ.md
+The project proposal was accepted in the Accelerator-Z program.
 
 ## Setup
 

@@ -142,3 +142,22 @@ pub async fn test_plasma_get_entries_by_address() -> Result<()> {
     // dbg!(&_fel);
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_plasma_get_required_pow_for_account_block() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+    dbg!("hey");
+    assert_eq!(client.is_connected(), true);
+    let a = Address::parse("z1qz5fskcw8q6zndyu2w5eps9cyk3ekn9ecvcngd")?;
+    let a_to = Address::parse("z1qqdtl63rkhap72nlaymtkemlchwv0ns9ksfjyn")?;
+    let _rpfa = znn_sdk_rust::api::embedded::Plasma::get_required_pow_for_account_block(
+        &client,
+        a,
+        1,
+        a_to,
+        vec![],
+    )
+    .await?;
+    // dbg!(&_fel);
+    Ok(())
+}
