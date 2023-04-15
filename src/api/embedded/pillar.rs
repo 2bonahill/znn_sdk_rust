@@ -14,24 +14,34 @@ pub struct PillarApi {}
 
 impl PillarApi {
     pub async fn get_qsr_registration_cost(client: &WsClient) -> Result<u64, Error> {
-        let response: u64 = client
+        let response = client
             .send_request("embedded.pillar.getQsrRegistrationCost", vec![])
             .await?
-            .as_u64()
-            .unwrap();
-        Ok(response)
+            .as_u64();
+
+        match response {
+            Some(r) => Ok(r),
+            None => Err(Error::ApiError(format!(
+                "embedded.pillar.getQsrRegistrationCost returned Null"
+            ))),
+        }
     }
 
     pub async fn check_name_availability(client: &WsClient, name: String) -> Result<bool, Error> {
-        let response: bool = client
+        let response = client
             .send_request(
                 "embedded.pillar.checkNameAvailability",
                 vec![serde_json::to_value(name)?],
             )
             .await?
-            .as_bool()
-            .unwrap();
-        Ok(response)
+            .as_bool();
+
+        match response {
+            Some(r) => Ok(r),
+            None => Err(Error::ApiError(format!(
+                "embedded.pillar.checkNameAvailability returned Null"
+            ))),
+        }
     }
 
     pub async fn get_all(

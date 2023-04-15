@@ -4,6 +4,7 @@ use jsonrpsee_core::client::ClientT;
 use jsonrpsee_ws_client::{types::ParamsSer, WsClientBuilder};
 use serde_json::Value;
 
+#[derive(Debug)]
 pub struct WsClient {
     client: jsonrpsee_ws_client::WsClient,
 }

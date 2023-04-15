@@ -36,7 +36,7 @@ pub enum Error {
     #[error("Error Bech32 : '{0}'")]
     Bech32Error(#[from] bech32::Error),
 
-    #[error("Api Null Respnse Error: '{0}'")]
+    #[error("Api Respnse Error: '{0}'")]
     ApiError(String),
 
     #[error(transparent)]

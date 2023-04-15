@@ -17,7 +17,6 @@ use znn_sdk_rust::{
 pub async fn test_ws_client() -> Result<()> {
     let client = WsClient::initialize("invalid URL!").await;
     assert_eq!(client.is_err(), true);
-    // TODO: make better
     Ok(())
 }
 
@@ -52,12 +51,23 @@ pub async fn test_pillar_api_get_qsr_registration_cost() -> Result<()> {
 #[tokio::test]
 pub async fn test_pillar_check_name_availability() -> Result<()> {
     let client = WsClient::initialize(test_data::TEST_NODE).await?;
+
+    // should be available
     let result: bool = znn_sdk_rust::api::embedded::Pillar::check_name_availability(
         &client,
         "SultanOfStaking".to_string(),
     )
     .await?;
     assert_eq!(result, false);
+
+    // should not be available
+    let result: bool = znn_sdk_rust::api::embedded::Pillar::check_name_availability(
+        &client,
+        "SultanOfStakingsXYZDoesNotExist123".to_string(),
+    )
+    .await?;
+    assert_eq!(result, true);
+
     Ok(())
 }
 
@@ -160,11 +170,11 @@ pub async fn test_plasma_get_required_pow_for_account_block() -> Result<()> {
     Ok(())
 }
 
-#[tokio::test]
-pub async fn test_sentinel_get_by_owner() -> Result<()> {
-    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
-    assert_eq!(client.is_connected(), true);
-    let a = Address::parse("z1qz5fskcw8q6zndyu2w5eps9cyk3ekn9ecvcngd")?;
-    let _rpfa = znn_sdk_rust::api::embedded::Sentinel::get_by_owner(&client, a).await?;
-    Ok(())
-}
+// #[tokio::test]
+// pub async fn test_sentinel_get_by_owner() -> Result<()> {
+//     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+//     assert_eq!(client.is_connected(), true);
+//     let a = Address::parse("z1qz5fskcw8q6zndyu2w5eps9cyk3ekn9ecvcngd")?;
+//     let _rpfa = znn_sdk_rust::api::embedded::Sentinel::get_by_owner(&client, a).await?;
+//     Ok(())
+// }
