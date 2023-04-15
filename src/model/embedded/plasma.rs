@@ -44,7 +44,21 @@ pub struct FusionEntry {
     pub beneficiary: Address,
     pub expirationHeight: u64,
     pub id: String, //TODO: make proper hash type
-                    // pub isRevocable: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[allow(non_snake_case)]
+pub struct GetRequiredResponse {
+    pub availablePlasma: u64,
+    pub basePlasma: u64,
+    pub requiredDifficulty: u64,
+}
+
+impl GetRequiredResponse {
+    pub fn from_json(json: Map<String, Value>) -> Result<Self> {
+        let grr: GetRequiredResponse = serde_json::from_value(serde_json::Value::Object(json))?;
+        Ok(grr)
+    }
 }
 
 #[derive(Debug, Serialize)]

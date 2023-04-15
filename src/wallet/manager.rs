@@ -24,7 +24,7 @@ impl KeyStoreManager {
         let encrypted_kf: KeyFile = KeyFile::encrypt(store.clone(), password.to_string()).await?;
         // TODO: create real path
         let path = znn_default_paths()?.wallet.join(name);
-        let mut file = File::create(&path)?;
+        let mut file = File::create(path)?;
         let serialized = serde_json::to_string(&encrypted_kf).unwrap();
         Ok(file.write_all(serialized.as_bytes())?)
     }

@@ -14,18 +14,22 @@ impl LedgerApi {
     ) -> Result<AccountInfo, Error> {
         let address_string = address.to_string()?;
 
-        let response: Map<String, Value> = client
+        let response = client
             .send_request(
                 "ledger.getAccountInfoByAddress",
                 vec![serde_json::to_value(&address_string)?],
             )
-            .await?
-            .as_object()
-            .unwrap()
-            .clone();
+            .await?;
 
-        // dbg!("ledger::getAccountInfoByAddress: {}", &response);
-        let ai: AccountInfo = AccountInfo::from_json(response)?;
-        Ok(ai)
+        match response.as_object() {
+            Some(r) => {
+                let ai: AccountInfo = AccountInfo::from_json(r.clone())?;
+                Ok(ai)
+            }
+            None => Err(Error::ApiError(format!(
+                "ledger.getAccountInfoByAddress returned Null for address: {}",
+                address.to_string()?
+            ))),
+        }
     }
 }

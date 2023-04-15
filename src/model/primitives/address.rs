@@ -60,7 +60,7 @@ impl Address {
     }
 
     pub fn to_string(&self) -> Result<String, Error> {
-        let bech32 = bech32::encode(&self.hrp, &self.core.to_base32(), Variant::Bech32)?;
+        let bech32 = bech32::encode(&self.hrp, self.core.to_base32(), Variant::Bech32)?;
         let bech32_utf16 = Vec::from_iter(bech32.encode_utf16());
         let address_string = String::from_utf16(&bech32_utf16)?;
         Ok(address_string)

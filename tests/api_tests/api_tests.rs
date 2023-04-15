@@ -17,7 +17,7 @@ use znn_sdk_rust::{
 pub async fn test_ws_client() -> Result<()> {
     let client = WsClient::initialize("invalid URL!").await;
     assert_eq!(client.is_err(), true);
-    // TODO: this is not really a good test
+    // TODO: make better
     Ok(())
 }
 
@@ -146,7 +146,6 @@ pub async fn test_plasma_get_entries_by_address() -> Result<()> {
 #[tokio::test]
 pub async fn test_plasma_get_required_pow_for_account_block() -> Result<()> {
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
-    dbg!("hey");
     assert_eq!(client.is_connected(), true);
     let a = Address::parse("z1qz5fskcw8q6zndyu2w5eps9cyk3ekn9ecvcngd")?;
     let a_to = Address::parse("z1qqdtl63rkhap72nlaymtkemlchwv0ns9ksfjyn")?;
@@ -158,6 +157,14 @@ pub async fn test_plasma_get_required_pow_for_account_block() -> Result<()> {
         vec![],
     )
     .await?;
-    // dbg!(&_fel);
+    Ok(())
+}
+
+#[tokio::test]
+pub async fn test_sentinel_get_by_owner() -> Result<()> {
+    let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
+    assert_eq!(client.is_connected(), true);
+    let a = Address::parse("z1qz5fskcw8q6zndyu2w5eps9cyk3ekn9ecvcngd")?;
+    let _rpfa = znn_sdk_rust::api::embedded::Sentinel::get_by_owner(&client, a).await?;
     Ok(())
 }

@@ -1,5 +1,5 @@
 extern crate aes_gcm;
-use std::fmt::Debug;
+use std::fmt::{self, Debug};
 use thiserror;
 
 #[derive(thiserror::Error, Debug)]
@@ -35,6 +35,9 @@ pub enum Error {
 
     #[error("Error Bech32 : '{0}'")]
     Bech32Error(#[from] bech32::Error),
+
+    #[error("Api Null Respnse Error: '{0}'")]
+    ApiError(String),
 
     #[error(transparent)]
     Other(#[from] anyhow::Error),

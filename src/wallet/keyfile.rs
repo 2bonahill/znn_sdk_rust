@@ -121,7 +121,7 @@ pub fn serialize_crypto_vec<S>(v: &[u8], s: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
-    let hex_string = hex::encode(&v);
+    let hex_string = hex::encode(v);
     s.serialize_str(&hex_string)
 }
 
