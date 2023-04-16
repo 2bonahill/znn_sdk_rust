@@ -34,9 +34,7 @@ pub async fn test_ledger_api() -> Result<()> {
 pub async fn test_pillar_api_get_all() -> Result<()> {
     let client: WsClient = WsClient::initialize(test_data::TEST_NODE).await?;
     assert_eq!(client.is_connected(), true);
-
     let _pil: PillarInfoList = znn_sdk_rust::api::embedded::Pillar::get_all(&client, 1, 3).await?;
-
     Ok(())
 }
 

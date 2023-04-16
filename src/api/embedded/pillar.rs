@@ -6,7 +6,6 @@ use crate::model::embedded::pillar::DelegationInfo;
 use crate::model::embedded::pillar::PillarInfo;
 use crate::model::embedded::pillar::PillarInfoList;
 use crate::model::primitives::address::Address;
-// use anyhow::Ok;
 use serde_json::Map;
 use serde_json::Value;
 
@@ -49,7 +48,7 @@ impl PillarApi {
         page_index: u8,
         page_size: u8,
     ) -> Result<PillarInfoList, Error> {
-        let response: Map<String, Value> = client
+        let response = client
             .send_request(
                 "embedded.pillar.getAll",
                 vec![
@@ -57,13 +56,18 @@ impl PillarApi {
                     serde_json::to_value(page_size)?,
                 ],
             )
-            .await?
-            .as_object()
-            .unwrap()
-            .clone();
+            .await?;
 
-        let pil: PillarInfoList = PillarInfoList::from_json(response)?;
-        Ok(pil)
+        match response.as_object() {
+            Some(r) => {
+                let pil: PillarInfoList = PillarInfoList::from_json(r.clone())?;
+                Ok(pil)
+            }
+            None => Err(Error::ApiError(format!(
+                "embedded.pillar.getAll returned Null for page index {} and size {}",
+                page_index, page_size
+            ))),
+        }
     }
 
     pub async fn get_by_owner(
