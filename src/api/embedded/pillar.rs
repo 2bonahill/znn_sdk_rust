@@ -74,24 +74,29 @@ impl PillarApi {
         client: &WsClient,
         address: Address,
     ) -> Result<Vec<PillarInfo>, Error> {
-        let response: Vec<Value> = client
+        let response = client
             .send_request(
                 "embedded.pillar.getByOwner",
                 vec![serde_json::to_value(address.to_string()?)?],
             )
-            .await?
-            .as_array()
-            .unwrap()
-            .clone();
+            .await?;
 
         let mut result: Vec<PillarInfo> = Vec::new();
 
-        for i in &response {
-            let pi_map: Map<String, Value> = i.as_object().unwrap().clone();
-            let pi: PillarInfo = PillarInfo::from_json(pi_map)?;
-            result.push(pi);
+        match response.as_array() {
+            Some(r) => {
+                for i in r {
+                    let pi_map: Map<String, Value> = i.as_object().unwrap().clone();
+                    let pi: PillarInfo = PillarInfo::from_json(pi_map)?;
+                    result.push(pi);
+                }
+                Ok(result)
+            }
+            None => Err(Error::ApiError(format!(
+                "embedded.pillar.getByOwner returned Null for address {}",
+                address.to_string()?
+            ))),
         }
-        Ok(result)
     }
 
     pub async fn get_by_name(client: &WsClient, name: &str) -> Result<Option<PillarInfo>, Error> {

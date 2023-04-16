@@ -75,7 +75,6 @@ pub async fn test_pillar_get_by_owner() -> Result<()> {
     assert_eq!(client.is_connected(), true);
     let a = Address::parse("z1qzlaadsmar8pm0rdfwkctvxc8n2g5gaadxvmqj")?;
     let _ai = znn_sdk_rust::api::embedded::Pillar::get_by_owner(&client, a).await?;
-    // dbg!(&_ai);
     Ok(())
 }
 
