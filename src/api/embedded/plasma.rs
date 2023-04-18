@@ -5,27 +5,22 @@ use crate::model::embedded::plasma::GetRequiredParam;
 use crate::model::embedded::plasma::GetRequiredResponse;
 use crate::model::embedded::plasma::PlasmaInfo;
 use crate::model::primitives::address::Address;
+use std::rc::Rc;
 use std::vec;
 
-pub struct PlasmaApi;
+pub struct PlasmaApi {
+    pub client: Rc<WsClient>,
+}
 
 impl PlasmaApi {
-    pub async fn get(client: &WsClient, address: Address) -> Result<PlasmaInfo, Error> {
-        let response = client
-            .send_request(
-                "embedded.plasma.get",
-                vec![serde_json::to_value(address.to_string()?)?],
-            )
-            .await?
-            .as_object()
-            .unwrap()
-            .clone();
-        let pi: PlasmaInfo = PlasmaInfo::from_json(response)?;
-        Ok(pi)
+    pub fn new(client: Rc<WsClient>) -> Self {
+        Self { client }
     }
 
-    pub async fn get_better(client: &WsClient, address: Address) -> Result<PlasmaInfo, Error> {
-        let response = client
+    pub async fn get(&self, address: Address) -> Result<PlasmaInfo, Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.plasma.get",
                 vec![serde_json::to_value(address.to_string()?)?],
@@ -45,12 +40,14 @@ impl PlasmaApi {
     }
 
     pub async fn get_entries_by_address(
-        client: &WsClient,
+        &self,
         address: Address,
         page_index: u32,
         page_size: u32,
     ) -> Result<FusionEntryList, Error> {
-        let response = client
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.plasma.getEntriesByAddress",
                 vec![
@@ -68,7 +65,7 @@ impl PlasmaApi {
     }
 
     pub async fn get_required_pow_for_account_block(
-        client: &WsClient,
+        &self,
         address: Address,
         block_type: u32,
         to_address: Address,
@@ -82,7 +79,9 @@ impl PlasmaApi {
         };
         let serialized_grp = serde_json::to_value(&grp).unwrap();
 
-        let response = client
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.plasma.getRequiredPoWForAccountBlock",
                 vec![serialized_grp],

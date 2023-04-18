@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::error::Error;
 use crate::{client::websocket::WsClient, model::primitives::address::Address};
 
@@ -6,11 +8,19 @@ NOTE: Sentinels are not yet implemented by the NoM. This is why
 their SDK implementation will be completed once they are implemented
 */
 
-pub struct SentinelApi;
+pub struct SentinelApi {
+    pub client: Rc<WsClient>,
+}
 
 impl SentinelApi {
-    pub async fn get_by_owner(client: &WsClient, address: Address) -> Result<(), Error> {
-        let response = client
+    pub fn new(client: Rc<WsClient>) -> Self {
+        Self { client }
+    }
+
+    pub async fn get_by_owner(&self, address: Address) -> Result<(), Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.sentinel.getByOwner",
                 vec![serde_json::to_value(address.to_string()?)?],

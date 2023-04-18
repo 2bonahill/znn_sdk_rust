@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::client::websocket::WsClient;
 use crate::error::Error;
 use crate::model::embedded::common::RewardHistoryList;
@@ -9,11 +11,19 @@ use crate::model::primitives::address::Address;
 use serde_json::Map;
 use serde_json::Value;
 
-pub struct PillarApi {}
+pub struct PillarApi {
+    pub client: Rc<WsClient>,
+}
 
 impl PillarApi {
-    pub async fn get_qsr_registration_cost(client: &WsClient) -> Result<u64, Error> {
-        let response = client
+    pub fn new(client: Rc<WsClient>) -> Self {
+        Self { client }
+    }
+
+    pub async fn get_qsr_registration_cost(&self) -> Result<u64, Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request("embedded.pillar.getQsrRegistrationCost", vec![])
             .await?
             .as_u64();
@@ -26,8 +36,10 @@ impl PillarApi {
         }
     }
 
-    pub async fn check_name_availability(client: &WsClient, name: String) -> Result<bool, Error> {
-        let response = client
+    pub async fn check_name_availability(&self, name: String) -> Result<bool, Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.checkNameAvailability",
                 vec![serde_json::to_value(name)?],
@@ -43,12 +55,10 @@ impl PillarApi {
         }
     }
 
-    pub async fn get_all(
-        client: &WsClient,
-        page_index: u8,
-        page_size: u8,
-    ) -> Result<PillarInfoList, Error> {
-        let response = client
+    pub async fn get_all(&self, page_index: u8, page_size: u8) -> Result<PillarInfoList, Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getAll",
                 vec![
@@ -70,11 +80,10 @@ impl PillarApi {
         }
     }
 
-    pub async fn get_by_owner(
-        client: &WsClient,
-        address: Address,
-    ) -> Result<Vec<PillarInfo>, Error> {
-        let response = client
+    pub async fn get_by_owner(&self, address: Address) -> Result<Vec<PillarInfo>, Error> {
+        let response: Value = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getByOwner",
                 vec![serde_json::to_value(address.to_string()?)?],
@@ -99,8 +108,10 @@ impl PillarApi {
         }
     }
 
-    pub async fn get_by_name(client: &WsClient, name: &str) -> Result<Option<PillarInfo>, Error> {
-        let response = client
+    pub async fn get_by_name(&self, name: &str) -> Result<Option<PillarInfo>, Error> {
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getByName",
                 vec![serde_json::to_value(name)?],
@@ -114,11 +125,10 @@ impl PillarApi {
         Ok(None)
     }
 
-    pub async fn get_delegated_pillar(
-        client: &WsClient,
-        address: Address,
-    ) -> Result<DelegationInfo, Error> {
-        let response: Map<String, Value> = client
+    pub async fn get_delegated_pillar(&self, address: Address) -> Result<DelegationInfo, Error> {
+        let response: Map<String, Value> = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getDelegatedPillar",
                 vec![serde_json::to_value(address.to_string()?)?],
@@ -131,8 +141,10 @@ impl PillarApi {
         Ok(di)
     }
 
-    pub async fn get_deposited_qsr(client: &WsClient, address: Address) -> Result<u64, Error> {
-        let response: u64 = client
+    pub async fn get_deposited_qsr(&self, address: Address) -> Result<u64, Error> {
+        let response: u64 = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getDepositedQsr",
                 vec![serde_json::to_value(address.to_string()?)?],
@@ -144,10 +156,12 @@ impl PillarApi {
     }
 
     pub async fn get_uncollected_reward(
-        client: &WsClient,
+        &self,
         address: Address,
     ) -> Result<UncollectedReward, Error> {
-        let response: Map<String, Value> = client
+        let response: Map<String, Value> = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getUncollectedReward",
                 vec![serde_json::to_value(address.to_string()?)?],
@@ -161,12 +175,14 @@ impl PillarApi {
     }
 
     pub async fn get_frontier_reward_by_page(
-        client: &WsClient,
+        &self,
         address: Address,
         page_index: u8,
         page_size: u8,
     ) -> Result<RewardHistoryList, Error> {
-        let response: Map<String, Value> = client
+        let response: Map<String, Value> = self
+            .client
+            .as_ref()
             .send_request(
                 "embedded.pillar.getFrontierRewardByPage",
                 vec![

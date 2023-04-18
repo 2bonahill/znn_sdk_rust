@@ -1,20 +1,28 @@
+use std::rc::Rc;
+
 use crate::client::websocket::WsClient;
 use crate::error::Error;
 use crate::model::nom::account_info::AccountInfo;
 use crate::model::primitives::address::Address;
-use serde_json::Map;
-use serde_json::Value;
 
-pub struct LedgerApi {}
+pub struct LedgerApi {
+    pub client: Rc<WsClient>,
+}
 
 impl LedgerApi {
+    pub fn new(client: Rc<WsClient>) -> Self {
+        Self { client }
+    }
+
     pub async fn get_account_info_by_address(
-        client: &WsClient,
+        &self,
         address: Address,
     ) -> Result<AccountInfo, Error> {
         let address_string = address.to_string()?;
 
-        let response = client
+        let response = self
+            .client
+            .as_ref()
             .send_request(
                 "ledger.getAccountInfoByAddress",
                 vec![serde_json::to_value(&address_string)?],

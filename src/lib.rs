@@ -8,6 +8,7 @@ pub mod model;
 pub mod pow;
 pub mod utils;
 pub mod wallet;
+pub mod zenon;
 
 pub fn hi_from_zenon() {
     println!("Time to get zenonized...");
