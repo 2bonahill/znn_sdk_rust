@@ -60,7 +60,7 @@ You can find all [examples](./examples) in the examples folder.
   use znn_sdk_rust as znn;
   ...
   
-  let znn = Zenon::init("ws://public.deeZNNodez.com:35998")
+  let znn = Zenon::init("ws://xxx:35998")
         .await
         .unwrap();
     println!("is the client connected?: {}", znn.client.is_connected());
