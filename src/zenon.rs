@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use crate::{
-    api::{embedded::embedded::EmbeddedApi, ledger::LedgerApi},
+    api::{embedded::EmbeddedApi, ledger::LedgerApi},
     client::websocket::WsClient,
     error::Error,
 };
