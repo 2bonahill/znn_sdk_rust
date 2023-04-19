@@ -166,3 +166,22 @@ pub async fn test_plasma_get_required_pow_for_account_block() -> Result<()> {
         .await?;
     Ok(())
 }
+
+#[tokio::test]
+pub async fn test_accelerator_get_all() -> Result<()> {
+    let znn = Zenon::init(test_data::TEST_NODE).await?;
+    let _pl = znn.embedded.accelerator.get_all(1, 50).await?;
+    Ok(())
+}
+
+#[tokio::test]
+pub async fn test_accelerator_get_prject_by_id() -> Result<()> {
+    let znn = Zenon::init(test_data::TEST_NODE).await?;
+    let _p = znn
+        .embedded
+        .accelerator
+        .get_project_by_id("181d796b08ee088bf91bc180d1bf70ff9c3a7b2e763e5481ac959d7a131567fa")
+        .await?;
+    // dbg!(&_p);
+    Ok(())
+}

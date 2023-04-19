@@ -1,3 +1,4 @@
+pub mod accelerator;
 pub mod common;
 pub mod pillar;
 pub mod plasma;
