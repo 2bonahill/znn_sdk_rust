@@ -3,7 +3,7 @@ pub mod pillar;
 pub mod plasma;
 pub mod sentinel;
 
-use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::client::websocket::WsClient;
 
@@ -12,7 +12,7 @@ use self::{
 };
 
 pub struct EmbeddedApi {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
     pub accelerator: AcceleratorApi,
     pub pillar: PillarApi,
     pub plasma: PlasmaApi,
@@ -20,7 +20,7 @@ pub struct EmbeddedApi {
 }
 
 impl EmbeddedApi {
-    pub fn new(client: Rc<WsClient>) -> Self {
+    pub fn new(client: Arc<WsClient>) -> Self {
         Self {
             client: client.clone(),
             accelerator: AcceleratorApi::new(client.clone()),

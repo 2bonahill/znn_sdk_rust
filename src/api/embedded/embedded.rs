@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use crate::client::websocket::WsClient;
 
 use super::{pillar::PillarApi, plasma::PlasmaApi, sentinel::SentinelApi};

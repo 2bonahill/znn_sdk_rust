@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::client::websocket::WsClient;
 use crate::error::Error;
@@ -12,11 +12,11 @@ use serde_json::Map;
 use serde_json::Value;
 
 pub struct PillarApi {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
 }
 
 impl PillarApi {
-    pub fn new(client: Rc<WsClient>) -> Self {
+    pub fn new(client: Arc<WsClient>) -> Self {
         Self { client }
     }
 

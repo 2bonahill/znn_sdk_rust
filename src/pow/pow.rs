@@ -1,3 +1,5 @@
+// A rust based implementation of a basic PoW algorithm
+
 extern crate rand;
 use rand::Rng;
 use sha3::{Digest, Sha3_256};
@@ -142,17 +144,24 @@ mod tests {
     }
 
     #[test]
-    fn test_get_target() {
-        let x: u64 = 12345678;
-        let t = get_target(x);
-        assert_eq!(t.len(), OUT_SIZE);
+    fn test_benchmark_pow() {
+        for i in 0..10 {
+            let start = Instant::now();
+            let x = benchmark_pow(1 << i);
+            let duration = start.elapsed();
+            println!(
+                "Round number: {} - {} // Time: {}ns",
+                i,
+                &x,
+                duration.as_nanos()
+            );
+        }
     }
 
     #[test]
-    fn test_hash_workflow() {
+    fn test_compute_hash() {
         // generate some random hash in data and set up the scene
         let in_hash: InHash = [0; IN_SIZE].map(|_| -> u8 { rand::thread_rng().gen() });
-        let _target = get_target(3);
         let entropy = get_random_seed();
 
         // get data
@@ -162,24 +171,43 @@ mod tests {
         // compute the  hash
         let mut hash: Hash = [0; OUT_SIZE];
         compute_hash(&mut hash, &data);
+    }
 
-        // the nonce will be the return value
-        let _nonce = data_to_nonce(&data);
+    #[test]
+    fn test_get_data() {
+        // generate some random hash in data and set up the scene
+        let in_hash: InHash = [0; IN_SIZE].map(|_| -> u8 { rand::thread_rng().gen() });
+        let entropy = get_random_seed();
+
+        // get data
+        let data = get_data(&entropy, &in_hash);
+        assert_eq!(data.len(), DATA_SIZE);
+    }
+
+    #[test]
+    fn test_get_target() {
+        let diff1: u64 = rand::thread_rng().gen();
+        let diff2: u64 = diff1 + 1;
+        let tar1 = get_target(diff1);
+        let tar2 = get_target(diff2);
+        assert_eq!(tar1.len(), OUT_SIZE);
+        assert_eq!(tar2.len(), OUT_SIZE);
+        assert!(greater(&tar2, &tar1));
     }
 
     #[test]
     fn test_utils() {
-        let mut next_data_test = [
+        let mut nd1 = [
             255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
-        let mut next_data_test2 = [
+        let mut nd2 = [
             255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ];
 
-        assert!(next_data(&mut next_data_test, 8));
-        assert!(!next_data(&mut next_data_test2, 8));
+        assert!(next_data(&mut nd1, 8));
+        assert!(!next_data(&mut nd2, 8));
 
         assert!(super::greater(
             &[0, 0, 0, 0, 0, 0, 0, 2],

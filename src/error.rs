@@ -1,5 +1,5 @@
 extern crate aes_gcm;
-use std::fmt::{self, Debug};
+use std::fmt::Debug;
 use thiserror;
 
 #[derive(thiserror::Error, Debug)]

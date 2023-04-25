@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::error::Error;
 use crate::{client::websocket::WsClient, model::primitives::address::Address};
@@ -9,11 +9,11 @@ their SDK implementation will be completed once they are implemented
 */
 
 pub struct SentinelApi {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
 }
 
 impl SentinelApi {
-    pub fn new(client: Rc<WsClient>) -> Self {
+    pub fn new(client: Arc<WsClient>) -> Self {
         Self { client }
     }
 

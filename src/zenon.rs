@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::{
     api::{embedded::EmbeddedApi, ledger::LedgerApi},
@@ -7,14 +7,14 @@ use crate::{
 };
 
 pub struct Zenon {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
     pub embedded: EmbeddedApi,
     pub ledger: LedgerApi,
 }
 
 impl Zenon {
     pub async fn init(url: &str) -> Result<Self, Error> {
-        let client = Rc::new(WsClient::initialize(url).await?);
+        let client = Arc::new(WsClient::initialize(url).await?);
         let embedded = EmbeddedApi::new(client.clone());
         let ledger: LedgerApi = LedgerApi::new(client.clone());
 

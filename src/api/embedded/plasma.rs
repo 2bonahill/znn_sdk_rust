@@ -5,15 +5,15 @@ use crate::model::embedded::plasma::GetRequiredParam;
 use crate::model::embedded::plasma::GetRequiredResponse;
 use crate::model::embedded::plasma::PlasmaInfo;
 use crate::model::primitives::address::Address;
-use std::rc::Rc;
+use std::sync::Arc;
 use std::vec;
 
 pub struct PlasmaApi {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
 }
 
 impl PlasmaApi {
-    pub fn new(client: Rc<WsClient>) -> Self {
+    pub fn new(client: Arc<WsClient>) -> Self {
         Self { client }
     }
 

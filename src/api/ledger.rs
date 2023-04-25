@@ -1,16 +1,15 @@
-use std::rc::Rc;
-
 use crate::client::websocket::WsClient;
 use crate::error::Error;
 use crate::model::nom::account_info::AccountInfo;
 use crate::model::primitives::address::Address;
+use std::sync::Arc;
 
 pub struct LedgerApi {
-    pub client: Rc<WsClient>,
+    pub client: Arc<WsClient>,
 }
 
 impl LedgerApi {
-    pub fn new(client: Rc<WsClient>) -> Self {
+    pub fn new(client: Arc<WsClient>) -> Self {
         Self { client }
     }
 
